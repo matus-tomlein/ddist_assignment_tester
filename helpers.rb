@@ -9,9 +9,9 @@ module TestHelper
     puts "Testing #{description}".bold
     begin
       t1 = Time.now
-      passed = yield
-      t2 = Time.now
-      delta = t2 - t1
+      yield
+      delta = Time.now - t1
+
       @testing_time += delta
       puts "OK, #{delta/1000} s".green
     rescue => ex
