@@ -6,15 +6,22 @@ class Commander
                                       ['0', '1', '2']
                                     end
 
-    testing 'starting listening on server 1' do
-      listen [server]
+    t_listen = Thread.new do # some solutions were blocking until a client connects
+      testing 'starting listening on server 1' do
+        listen [server]
+      end
+    end
+    wait 2
+
+    t_connect = Thread.new do
+      testing 'connecting client to server 1' do
+        connect [client, server]
+      end
     end
     wait 1
 
-    testing 'connecting client to server 1' do
-      connect [client, server]
-    end
-    wait 1
+    t_listen.join
+    t_connect.join
 
     testing 'writing a message on client' do
       test_writing_message client, server
@@ -39,15 +46,22 @@ class Commander
       disconnect [client]
     end
 
-    testing 'starting listening on server 2' do
-      listen [second_server]
+    t_listen = Thread.new do
+      testing 'starting listening on server 2' do
+        listen [second_server]
+      end
+    end
+    wait 2
+
+    t_connect = Thread.new do
+      testing 'connecting client to server 2' do
+        connect [client, second_server]
+      end
     end
     wait 1
 
-    testing 'connecting client to server 2' do
-      connect [client, second_server]
-    end
-    wait 1
+    t_listen.join
+    t_connect.join
 
     testing 'writing a message on client' do
       test_writing_message client, second_server
@@ -92,10 +106,16 @@ class Commander
   alias_method :t1, :test1
 
   def prepare_test1(args)
+    handin_path = 'handin'
+    if args.any?
+      handin_path = args.first
+      puts "Using handin path: #{handin_path}"
+    end
+
     @instance_threads = []
-    @instance_threads << Thread.new { `ruby tester.rb 4567` }
-    @instance_threads << Thread.new { `ruby tester.rb 4444` }
-    @instance_threads << Thread.new { `ruby tester.rb 5555` }
+    @instance_threads << Thread.new { `ruby tester.rb 4567 #{handin_path}` }
+    @instance_threads << Thread.new { `ruby tester.rb 4444 #{handin_path}` }
+    @instance_threads << Thread.new { `ruby tester.rb 5555 #{handin_path}` }
   end
   alias_method :pt1, :prepare_test1
 
