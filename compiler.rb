@@ -51,24 +51,30 @@ class Compiler
   end
 
   def add_getters_to_source_code(source_code)
-    source_code.sub(
-      'class DistributedTextEditor extends JFrame {',
-      'class DistributedTextEditor extends JFrame {
-   public JTextArea _getArea1() { return this.area1; }
+    i_class = source_code.index('class DistributedTextEditor')
+    raise 'class DistributedTextEditor not found in source code' unless i_class
+    i_class = source_code.index('{', i_class)
+    raise 'class DistributedTextEditor not found in source code' unless i_class
+
+    source_code = source_code.insert(i_class + 1, 'public JTextArea _getArea1() { return this.area1; }
    public JTextArea _getArea2() { return this.area2; }
    public JTextField _getIPAddressField() { return this.ipaddress; }
    public JTextField _getPortNumberField() { return this.portNumber; }
-   public Action _getListenAction() { return this.Listen; }
-   public Action _getConnectAction() { return this.Connect; }
-   public Action _getDisconnectAction() { return this.Disconnect; }
-   public static DistributedTextEditor _instance;'
-    ).sub(
-      'DistributedTextEditor() {',
-      'DistributedTextEditor() { DistributedTextEditor._instance = this;'
-      ).sub(
-        'void saveOld() {',
-        'void saveOld() { if (1 == 1) { return; }'
-      )
+   public static DistributedTextEditor _instance;')
+
+    i = source_code.index('DistributedTextEditor()', i_class)
+    raise 'DistributedTextEditor() not found in source code' unless i
+    i = source_code.index('{', i)
+    raise 'DistributedTextEditor() not found in source code' unless i
+
+    source_code = source_code.insert(i + 1, 'DistributedTextEditor._instance = this;')
+
+    i = source_code.index('void saveOld()', i_class)
+    raise 'void saveOld() not found in source code' unless i
+    i = source_code.index('{', i)
+    raise 'void saveOld() not found in source code' unless i
+
+    source_code = source_code.insert(i + 1, 'if (1 == 1) { return; }')
   end
 
   def remove_compiled

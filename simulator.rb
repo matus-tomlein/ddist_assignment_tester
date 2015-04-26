@@ -1,5 +1,8 @@
 require_relative 'keyboard'
 
+java_import 'javax.swing.event.MenuKeyEvent'
+java_import 'java.awt.event.KeyEvent'
+
 class Simulator
   attr_reader :editor, :keyboard
 
@@ -10,21 +13,21 @@ class Simulator
   end
 
   def listen(port)
-    editor._getIPAddressField.setText('localhost')
+    editor._getIPAddressField.setText('127.0.0.1')
     editor._getPortNumberField.setText(port.to_s)
     sleep(0.2)
-    editor._getListenAction.actionPerformed(nil)
+    trigger_listen_action
   end
 
   def connect(host, port)
     editor._getIPAddressField.setText(host.to_s)
     editor._getPortNumberField.setText(port.to_s)
     sleep(0.2)
-    editor._getConnectAction.actionPerformed(nil)
+    trigger_connect_action
   end
 
   def disconnect
-    editor._getDisconnectAction.actionPerformed(nil)
+    trigger_disconnect_action
   end
 
   def write_in_text_area(text, caret, speed = 15)
@@ -47,6 +50,31 @@ class Simulator
   end
 
   private
+
+  def trigger_disconnect_action
+    trigger_file_menu_action('Disconnect')
+  end
+
+  def trigger_connect_action
+    trigger_file_menu_action('Connect')
+  end
+
+  def trigger_listen_action
+    trigger_file_menu_action('Listen')
+  end
+
+  def trigger_file_menu_action(name)
+    menu = editor.getJMenuBar.getMenu(0)
+    menu.getItemCount.times do |i|
+      item = menu.getItem(i)
+      if item.getText.downcase.include?(name.downcase)
+        item.doClick(200)
+        return
+      end
+    end
+
+    raise "Menu action #{name} not found"
+  end
 
   def text_area1
     @area1 ||= editor._getArea1

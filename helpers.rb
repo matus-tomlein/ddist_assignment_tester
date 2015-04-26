@@ -38,9 +38,9 @@ end
 module ConnectionHelper
   def initialize_connections
     @connections = {
-      '0' => [ 'localhost', '4567' ],
-      '1' => [ 'localhost', '4444' ],
-      '2' => [ 'localhost', '5555' ],
+      '0' => [ '127.0.0.1', '4567' ],
+      '1' => [ '127.0.0.1', '4444' ],
+      '2' => [ '127.0.0.1', '5555' ],
     }
     @server = '0'
   end
