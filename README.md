@@ -48,6 +48,10 @@ Then you can for instance use the following commands:
 - `write POSITION CLIENT_NAME MESSAGE` - write a message to the text area at the position
 - `test1 SERVER1_NAME CLIENT_NAME SERVER2_NAME`
 
+# Contributing
+
+Feel free to contribute new test cases or bug fixes using pull requests.
+
 # Disclaimer
 
-This project is my personal project, not part of the course.
+This is my personal project, not part of the course.
