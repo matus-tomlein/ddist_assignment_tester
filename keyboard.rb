@@ -10,7 +10,8 @@ class Keyboard
 
   def type_string(text, speed)
     text.split("").each do |char|
-      type_char char # sleep(speed / 100.0)
+      type_char char
+      sleep(speed)
     end
   end
 

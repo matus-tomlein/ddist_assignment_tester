@@ -17,7 +17,9 @@ module TestHelper
     rescue => ex
       puts "Error: #{ex.message}".red
       @failures += 1
+      return false
     end
+    true
   end
 
   def wait(seconds)
@@ -32,6 +34,27 @@ module TestHelper
     puts "Time: #{@testing_time / 1000} s".bold.underline
     @failures = 0
     @testing_time = 0.0
+  end
+
+  def test_writing_message(reader, writer, length = 50)
+    new_text = generate_string length
+    previous_text = read_area1 [writer]
+    caret = previous_text == '' ? 0 : rand(previous_text.size)
+    expected_text = previous_text.insert caret, new_text
+
+    write([caret, writer, new_text])
+    wait 1
+    text = read [reader]
+
+    if text != expected_text
+      raise "Expected '#{expected_text}' but got '#{text}''"
+    end
+
+    true
+  end
+
+  def generate_string(length)
+    (0...length).map { (65 + rand(26)).chr }.join
   end
 end
 

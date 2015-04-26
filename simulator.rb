@@ -30,7 +30,7 @@ class Simulator
     trigger_disconnect_action
   end
 
-  def write_in_text_area(text, caret, speed = 15)
+  def write_in_text_area(text, caret, speed = 0.05)
     text_area1.requestFocus
     text_area1.setCaretPosition(caret.to_i)
 
