@@ -1,4 +1,5 @@
 handin/
+handin-compiled/
 *.class
 
 # Mobile Tools for Java (J2ME)
