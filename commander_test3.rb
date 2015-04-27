@@ -53,9 +53,9 @@ class Commander
     end
 
     @instance_threads = []
-    @instance_threads << Thread.new { `ruby tester.rb 4567 #{handin_path}` }
-    @instance_threads << Thread.new { `ruby tester.rb 4444 #{handin_path}` }
-    @instance_threads << Thread.new { `ruby tester.rb 5555 #{handin_path}` }
+    @instance_threads << Thread.new { start_tester 4567, handin_path }
+    @instance_threads << Thread.new { start_tester 4444, handin_path }
+    @instance_threads << Thread.new { start_tester 5555, handin_path }
   end
   alias_method :pt3, :prepare_test3
 

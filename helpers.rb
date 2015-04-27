@@ -56,6 +56,10 @@ module TestHelper
   def generate_string(length)
     (0...length).map { (65 + rand(26)).chr }.join
   end
+
+  def start_tester(port, handin_path)
+    `jruby tester.rb #{port} #{handin_path}`
+  end
 end
 
 module ConnectionHelper
