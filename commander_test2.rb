@@ -8,10 +8,10 @@ class Commander
 
     t_listen = Thread.new do
       testing 'starting listening on server' do
-        listen [server]
+        listen_and_update_port server
       end
     end
-    wait 2
+    wait 3
 
     t_connect = Thread.new do
       testing 'connecting client to server' do

@@ -49,6 +49,10 @@ class Simulator
     text_area1.setText ''
   end
 
+  def current_port
+    editor._getPortNumberField.getText.to_i
+  end
+
   private
 
   def trigger_disconnect_action

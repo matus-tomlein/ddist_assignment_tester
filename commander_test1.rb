@@ -8,10 +8,10 @@ class Commander
 
     t_listen = Thread.new do # some solutions were blocking until a client connects
       testing 'starting listening on server 1' do
-        listen [server]
+        listen_and_update_port server
       end
     end
-    wait 2
+    wait 3
 
     t_connect = Thread.new do
       testing 'connecting client to server 1' do
@@ -48,10 +48,10 @@ class Commander
 
     t_listen = Thread.new do
       testing 'starting listening on server 2' do
-        listen [second_server]
+        listen_and_update_port second_server
       end
     end
-    wait 2
+    wait 3
 
     t_connect = Thread.new do
       testing 'connecting client to server 2' do

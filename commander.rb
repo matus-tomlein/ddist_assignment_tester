@@ -15,7 +15,10 @@ class Commander
   end
 
   def add(args)
-    @connections[args.shift] = [ args.shift, args.shift.to_i ]
+    host = args.shift
+    port = args.shift.to_i
+    app_port = port + 10
+    @connections[args.shift] = [ host, port, app_port ]
   end
 
   def list(args)
@@ -23,8 +26,8 @@ class Commander
   end
 
   def connect(args)
-    host, port = connection_host_and_port(args.last)
-    get args.first, '/connect', { host: host, port: port.to_i + 10 }
+    host, port, app_port = connection_host_and_port(args.last)
+    get args.first, '/connect', { host: host, port: app_port }
   end
   alias_method :c, :connect
 
@@ -34,8 +37,8 @@ class Commander
   alias_method :dc, :disconnect
 
   def listen(args)
-    host, port = connection_host_and_port(args.first)
-    get args.first, '/listen', { port: port.to_i + 10 }
+    host, port, app_port = connection_host_and_port(args.first)
+    get args.first, '/listen', { port: app_port }
   end
   alias_method :l, :listen
 
@@ -58,5 +61,16 @@ class Commander
       caret: caret,
       msg: args.join(' ')
     }
+  end
+
+  private
+
+  def listen_and_update_port(server)
+    port = listen [server]
+    if port
+      host, old_port, app_port = connection_host_and_port(server)
+      @connections[server] = [ host, old_port, port.to_i ]
+    end
+    port
   end
 end

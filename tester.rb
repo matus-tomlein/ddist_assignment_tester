@@ -34,6 +34,8 @@ Compiler.run(handin_path) do |editor|
   get '/listen' do
     protect_me do
       simulator.listen params['port'].to_i
+      sleep 1
+      simulator.current_port.to_s
     end
   end
 
