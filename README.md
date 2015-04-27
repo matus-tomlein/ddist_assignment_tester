@@ -48,6 +48,54 @@ Then you can for instance use the following commands:
 - `write POSITION CLIENT_NAME MESSAGE` - write a message to the text area at the position
 - `test1 SERVER1_NAME CLIENT_NAME SERVER2_NAME`
 
+# Making your solution compatible with the tester
+
+If you have you kept the basic structure from the example in Exercise 3, your
+solution should work with the tester.
+
+However, if you have diverged from the original example, add a class called
+`Simulated` to the root of the solution.
+It should provide the following methods (adapt to your implementation):
+
+```
+import editor.DistributedTextEditor;
+
+public class Simulated {
+  private DistributedTextEditor editor;
+
+  // this will be called at the start of the test, initialize the JForm here
+  public void init() {
+    editor = new DistributedTextEditor();
+  }
+
+  // you can return the upper text area if you don't have a lower one
+  public JTextArea getLowerTextArea() {
+    return editor.getUpperTextArea();
+  }
+
+  public JTextArea getUpperTextArea() {
+    return editor.getUpperTextArea();
+  }
+
+  public void startListening(int port) {
+    // set the port somehow
+    editor.getJMenuBar().getMenu(0).getItem(0).doClick(200);
+  }
+
+  public void connect(String ipAddress, int port) {
+    // set the ip and port somehow
+    editor.getJMenuBar().getMenu(0).getItem(1).doClick(200);
+  }
+
+  public void disconnect() {
+    editor.getJMenuBar().getMenu(0).getItem(2).doClick(200);
+  }
+}
+```
+
+The tester will automatically find the `Simulated` class and use it to interact
+with the solution.
+
 # Contributing
 
 Feel free to contribute new test cases or bug fixes using pull requests.
