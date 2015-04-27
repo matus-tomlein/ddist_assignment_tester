@@ -42,6 +42,10 @@ class Commander
   end
   alias_method :l, :listen
 
+  def shutdown(args)
+    get args.first, '/exit'
+  end
+
   def clear(args)
     get args.shift, '/clear'
   end

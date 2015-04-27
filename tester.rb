@@ -57,6 +57,11 @@ Compiler.run(handin_path) do |editor|
     end
   end
 
+  get '/exit' do
+    Thread.new { sleep 1; Process.kill 'INT', Process.pid }
+    'OK'
+  end
+
   def protect_me
     begin
       res = yield
