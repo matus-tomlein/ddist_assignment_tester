@@ -16,6 +16,7 @@ class Compiler
 
   def start(&block)
     copy
+    find_subfolder
     compile
     begin
       yield(create_editor)
@@ -29,7 +30,11 @@ class Compiler
 
   def create_editor
     $CLASSPATH << @compiled_folder
-    java_import 'DistributedTextEditor'
+    if @subfolder
+      java_import "#{@subfolder}.DistributedTextEditor"
+    else
+      java_import 'DistributedTextEditor'
+    end
     DistributedTextEditor.main nil
     DistributedTextEditor::_instance
   end
@@ -40,14 +45,35 @@ class Compiler
     FileUtils.copy_entry @handin_path, @compiled_folder
   end
 
+  def find_subfolder
+    unless File.exist? "#{@compiled_folder}/DistributedTextEditor.java"
+      subfolders =  Dir.entries(@compiled_folder).select {|entry| File.directory? File.join(@compiled_folder, entry) and !(entry =='.' || entry == '..') }
+      raise "DistributedTextEditor.java not found" unless subfolders.any?
+
+      subfolders.each do |subfolder|
+        if File.exist? "#{@compiled_folder}/#{subfolder}/DistributedTextEditor.java"
+          @subfolder = subfolder
+          return
+        end
+      end
+      raise "DistributedTextEditor.java not found"
+    end
+  end
+
   def compile
-    main_class_file_name = "#{@compiled_folder}/DistributedTextEditor.java"
+    code_folder = if @subfolder
+                    "#{@compiled_folder}/#{@subfolder}"
+                  else
+                    @compiled_folder
+                  end
+    main_class_file_name = "#{code_folder}/DistributedTextEditor.java"
     source_code = File.read(main_class_file_name)
+
     File.open(main_class_file_name, 'w') do |file|
       file.puts(add_getters_to_source_code(source_code))
     end
 
-    `cd #{@compiled_folder} && javac *.java`
+    `cd #{code_folder} && javac *.java`
   end
 
   def add_getters_to_source_code(source_code)
