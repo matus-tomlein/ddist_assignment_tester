@@ -8,8 +8,8 @@ require_relative 'simulator'
 port = ARGV.any? ? ARGV.shift.to_i : 4567
 handin_path = ARGV.any? ? ARGV.join(' ') : 'handin'
 
-Compiler.run(handin_path) do |editor|
-  simulator = Simulator.new(editor)
+Compiler.run(handin_path) do |editor_access|
+  simulator = Simulator.new(editor_access)
 
   set :port, port
 
