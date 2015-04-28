@@ -3,11 +3,11 @@
 # text area
 class Commander
   def test2(args)
-    server, client, second_server = if args.length == 3
-                                      args
-                                    else
-                                      ['0', '1']
-                                    end
+    server, client = if args.length == 2
+                       args
+                     else
+                       ['0', '1']
+                     end
 
     t_listen = Thread.new do
       testing 'starting listening on server' do
