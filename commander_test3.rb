@@ -1,3 +1,6 @@
+# Tests whether the server can handle when a client crashes
+# Connects client 1 to server, crashes it and tries to connect
+# client 2 and exchanges some messages
 class Commander
   def test3(args)
     server, client, second_client = if args.length == 3

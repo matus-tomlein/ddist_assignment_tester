@@ -1,3 +1,6 @@
+# Tests writing on the client and server at the same time
+# Doesn't work if the client and server write to the same
+# text area
 class Commander
   def test2(args)
     server, client, second_server = if args.length == 3

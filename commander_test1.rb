@@ -1,3 +1,9 @@
+# Basic test for the first handin
+# Connects client to server 1 and exchanges messages
+# Disconnects them
+# Connects client to server 2 and exchanges messages
+# Disconnects the client and reconnects to server 2
+# Exchanges messages
 class Commander
   def test1(args)
     server, client, second_server = if args.length == 3
