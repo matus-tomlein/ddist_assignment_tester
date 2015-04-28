@@ -19,6 +19,12 @@ Compiler.run(handin_path) do |editor_access|
     end
   end
 
+  get '/set_caret' do
+    protect_me do
+      simulator.set_caret_position params['caret']
+    end
+  end
+
   get '/read_area1' do
     protect_me do
       simulator.read_text_area

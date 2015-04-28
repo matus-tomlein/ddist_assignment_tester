@@ -46,6 +46,10 @@ class Commander
     get args.first, '/exit'
   end
 
+  def set_caret(args)
+    get args.shift, '/set_caret', { caret: args.shift.to_i }
+  end
+
   def clear(args)
     get args.shift, '/clear'
   end

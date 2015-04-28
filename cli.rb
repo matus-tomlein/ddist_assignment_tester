@@ -2,6 +2,7 @@ require_relative 'commander'
 require_relative 'commander_test1'
 require_relative 'commander_test2'
 require_relative 'commander_test3'
+require_relative 'commander_test4'
 
 class Cli
   attr_reader :commander
