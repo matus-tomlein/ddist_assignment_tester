@@ -11,7 +11,7 @@ hand-ins.
 1. Install [JRuby](http://jruby.org)
 2. `cd` into the project
 3. Copy your solution to a folder called `handin`
-4. `bundle install`
+4. `gem install sinatra json colored`
 5. `ruby cli.rb` or `jruby cli.rb`
 
 # Usage
