@@ -23,7 +23,8 @@ class SimulatedEditorAccess
 
   def start_listening(port)
     @port = port
-    @simulated.startListening(port.to_i)
+    listening_port = @simulated.startListening(port.to_i)
+    @port = listening_port if listening_port
   end
 
   def connect(ip, port)
