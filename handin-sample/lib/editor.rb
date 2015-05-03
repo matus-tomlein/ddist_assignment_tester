@@ -54,6 +54,13 @@ class Editor
     end
   end
 
+  def clear
+    @first_position.next = nil
+    @caret_key = @first_position.key
+    @positions.clear
+    @positions[@first_position.key] = @first_position
+  end
+
   private
 
   def process_event_now(event)

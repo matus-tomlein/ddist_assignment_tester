@@ -66,6 +66,8 @@ class AppController
       @server.close
       @server = nil
     end
+
+    editor.clear
   end
 
   def hello_message(initialize)
