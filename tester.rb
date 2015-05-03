@@ -72,6 +72,8 @@ Compiler.run(handin_path) do |editor_access|
     begin
       res = yield
     rescue => e
+      puts e.message
+      puts e.backtrace.join("\n")
       return { 'error' => e.message }.to_json
     end
 
