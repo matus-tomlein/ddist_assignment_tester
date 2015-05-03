@@ -58,7 +58,9 @@ class Editor
 
   def process_event_now(event)
     send event.type, event
-    publish_event(event) unless event.dont_publish
+    if !event.dont_publish and event.editor == key
+      publish_event(event)
+    end
   end
 
   def relative_write(event)
@@ -111,11 +113,7 @@ class Editor
   def publish_event(event)
     t = Thread.new do
       listeners.each do |listener|
-        next if listener.key == event.editor
-
-        new_event = event.dup
-        new_event.editor = key
-        listener.process_event(new_event)
+        listener.process_event(event) if listener.active
       end
     end if listeners.any?
 

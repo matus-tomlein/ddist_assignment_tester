@@ -95,6 +95,7 @@ module ConnectionHelper
     res = open(
       "http://#{host}:#{port}#{path}#{to_get_params(args)}"
     ).read
+    puts res if @debug
 
     begin
       res = JSON.parse(res)

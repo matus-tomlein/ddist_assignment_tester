@@ -83,6 +83,10 @@ class Commander
     get args.shift, '/event_history'
   end
 
+  def debug(args)
+    @debug = true
+  end
+
   private
 
   def listen_and_update_port(server)
