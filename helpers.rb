@@ -58,7 +58,7 @@ module TestHelper
   end
 
   def start_tester(port, handin_path)
-    `jruby tester.rb #{port} #{handin_path}`
+    `bin/jruby-1.7.19/bin/jruby tester.rb #{port} #{handin_path}`
   end
 end
 

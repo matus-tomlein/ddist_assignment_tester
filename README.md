@@ -8,11 +8,9 @@ hand-ins.
 
 # Installation
 
-1. Install [JRuby](http://jruby.org)
-2. `cd` into the project
-3. Copy your solution to a folder called `handin`
-4. `gem install sinatra json colored`
-5. `ruby cli.rb` or `jruby cli.rb`
+1. `cd` into the project
+2. Copy your solution to a folder called `handin`
+3. `bin/jruby-1.7.19/bin/jruby cli.rb`
 
 # Usage
 
