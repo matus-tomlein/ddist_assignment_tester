@@ -44,6 +44,9 @@ class Commander
       test_writing_message server, second_client, 50
     end
 
+    shutdown [ second_client ]
+    shutdown [ server ]
+
     overview
   end
   alias_method :t3, :test3

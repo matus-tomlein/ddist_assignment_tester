@@ -98,7 +98,8 @@ module ConnectionHelper
 
     begin
       res = JSON.parse(res)
-      raise res['error'] if res['error']
+      raise res['error'] if res.is_a?(Hash) and res['error']
+      return res
     rescue JSON::ParserError => e
     end
 

@@ -11,13 +11,16 @@ class Keyboard
   def type_string(text, speed)
     text.split("").each do |char|
       type_char char
-      sleep(speed)
+      sleep(speed) if speed
     end
   end
 
   def type_char(char)
     upper = char.upcase == char
     modifiers = upper ? KeyEvent::VK_SHIFT : 0
+
+    EventHistory.log_event({ type: :typing,
+                             char: char })
 
     text_area.dispatchEvent(KeyEvent.new(
       text_area,

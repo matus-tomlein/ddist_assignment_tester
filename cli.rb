@@ -1,8 +1,5 @@
 require_relative 'lib/commander'
-require_relative 'tests/commander_test1'
-require_relative 'tests/commander_test2'
-require_relative 'tests/commander_test3'
-require_relative 'tests/commander_test4'
+Dir["tests/*.rb"].each {|file| require file }
 
 class Cli
   attr_reader :commander

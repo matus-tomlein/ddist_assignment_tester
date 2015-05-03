@@ -3,6 +3,7 @@ require 'json'
 require 'cgi'
 
 require_relative 'helpers'
+require_relative 'time_keeper'
 
 class Commander
   attr_reader :connections, :server
@@ -69,6 +70,17 @@ class Commander
       caret: caret,
       msg: args.join(' ')
     }
+  end
+
+  def synchronize_time(args)
+    TimeKeeper.start_new_checkpoint
+    args.each do |client|
+      Thread.new { get client, '/synchronize_time' }
+    end
+  end
+
+  def event_history(args)
+    get args.shift, '/event_history'
   end
 
   private

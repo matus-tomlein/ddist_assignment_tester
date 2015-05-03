@@ -4,12 +4,17 @@ require 'json'
 
 require_relative 'lib/compiler'
 require_relative 'lib/simulator'
+require_relative 'lib/time_keeper'
+require_relative 'lib/event_history'
+require_relative 'lib/content_watcher'
 
 port = ARGV.any? ? ARGV.shift.to_i : 4567
 handin_path = ARGV.any? ? ARGV.join(' ') : 'handin'
 
 Compiler.run(handin_path) do |editor_access|
   simulator = Simulator.new(editor_access)
+  content_watcher = ContentWatcher.new(editor_access.upper_text_area)
+  content_watcher.start_watching
 
   set :port, port
 
@@ -63,9 +68,17 @@ Compiler.run(handin_path) do |editor_access|
     end
   end
 
+  get '/synchronize_time' do
+    TimeKeeper.start_new_checkpoint
+  end
+
   get '/exit' do
     Thread.new { sleep 1; Process.kill 'INT', Process.pid }
     'OK'
+  end
+
+  get '/event_history' do
+    EventHistory.drop.to_json
   end
 
   def protect_me
