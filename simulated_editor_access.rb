@@ -1,13 +1,18 @@
 class SimulatedEditorAccess
-  def initialize(compiled_folder)
+  def initialize(compiled_folder, ruby = false)
+    @ruby = ruby
     @compiled_folder = compiled_folder
   end
 
   def compile
-    `cd #{@compiled_folder} && javac *.java`
+    if @ruby
+      require "#{@compiled_folder}/simulated.rb"
+    else
+      `cd #{@compiled_folder} && javac *.java`
 
-    $CLASSPATH << @compiled_folder
-    java_import 'Simulated'
+      $CLASSPATH << @compiled_folder
+      java_import 'Simulated'
+    end
 
     @simulated = Simulated.new
     @simulated.init

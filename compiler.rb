@@ -39,6 +39,8 @@ class Compiler
   def compile
     editor_access = if File.exist?("#{@compiled_folder}/Simulated.java")
                       SimulatedEditorAccess.new @compiled_folder
+                    elsif File.exist?("#{@compiled_folder}/simulated.rb")
+                      SimulatedEditorAccess.new @handin_path, true
                     else
                       EditorAccess.new @compiled_folder
                     end
