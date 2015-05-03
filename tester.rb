@@ -2,8 +2,8 @@ require 'java'
 require 'sinatra'
 require 'json'
 
-require_relative 'compiler'
-require_relative 'simulator'
+require_relative 'lib/compiler'
+require_relative 'lib/simulator'
 
 port = ARGV.any? ? ARGV.shift.to_i : 4567
 handin_path = ARGV.any? ? ARGV.join(' ') : 'handin'
