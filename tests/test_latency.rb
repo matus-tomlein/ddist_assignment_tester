@@ -1,6 +1,6 @@
 class Commander
   def test_latency(args)
-    server, client = (args.length == 2 ? args : ['0', '1'])
+    server, client = (args.length == 2 ? args : [ '0', '1' ])
 
     connect_client_and_server client, server
     synchronize_time [ client, server ]
@@ -15,6 +15,18 @@ class Commander
       puts "Average server-server latency is: #{latency}".underline
       latency = calculate_latency server_history, client_history, 'X'
       puts "Average server-client latency is: #{latency}".underline
+    end
+
+    testing 'measuring the latency writing on client' do
+      write [ 0, client, 'Y' * 100 ]
+      wait 1
+
+      client_history = event_history [ client ]
+      server_history = event_history [ server ]
+      latency = calculate_latency client_history, client_history, 'Y'
+      puts "Average client-client latency is: #{latency}".underline
+      latency = calculate_latency client_history, server_history, 'Y'
+      puts "Average client-server latency is: #{latency}".underline
     end
 
     shutdown [ client ]
