@@ -24,6 +24,11 @@ class Keyboard
       KeyEvent::KEY_TYPED, 0,
       modifiers, KeyEvent::VK_UNDEFINED, char[0].ord))
 
-    text_area.setCaretPosition(text_area.getCaretPosition + 1)
+    text_area.dispatchEvent(KeyEvent.new(text_area,
+                                         KeyEvent::KEY_PRESSED, 0,
+                                         0, KeyEvent::VK_RIGHT))
+    text_area.dispatchEvent(KeyEvent.new(text_area,
+                                         KeyEvent::KEY_RELEASED, 0,
+                                         0, KeyEvent::VK_RIGHT))
   end
 end
