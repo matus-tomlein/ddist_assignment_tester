@@ -12,11 +12,14 @@ class Commander
     testing '2 simultaneous editings' do
       writer1 = 'node_0'
       writer2 = 'node_1'
-      text1 = 'xX' * 10
-      text2 = 'yY' * 10
+      text1 = 'xX' * 20
+      text2 = 'yY' * 20
+
+      write [ 0, writer1, 'oo' ]
+      wait 1
 
       set_caret [ writer1, 0 ]
-      set_caret [ writer2, 0 ]
+      set_caret [ writer2, 2 ]
 
       wait 1
 
@@ -53,13 +56,16 @@ class Commander
       writer1 = 'node_0'
       writer2 = 'node_1'
       writer3 = 'node_2'
-      text1 = 'aA' * 5
-      text2 = 'bB' * 5
-      text3 = 'cC' * 5
+      text1 = 'aA' * 10
+      text2 = 'bB' * 10
+      text3 = 'cC' * 10
+
+      write [ 0, writer1, 'oooo' ]
+      wait 1
 
       set_caret [ writer1, 0 ]
-      set_caret [ writer2, 0 ]
-      set_caret [ writer3, 0 ]
+      set_caret [ writer2, 2 ]
+      set_caret [ writer3, 4 ]
 
       wait 1
 
@@ -100,15 +106,18 @@ class Commander
       writer2 = 'node_1'
       writer3 = 'node_2'
       writer4 = 'node_3'
-      text1 = 'dD' * 5
-      text2 = 'eE' * 5
-      text3 = 'fF' * 5
-      text4 = 'gG' * 5
+      text1 = 'dD' * 10
+      text2 = 'eE' * 10
+      text3 = 'fF' * 10
+      text4 = 'gG' * 10
+
+      write [ 0, writer1, 'oooooo' ]
+      wait 1
 
       set_caret [ writer1, 0 ]
-      set_caret [ writer2, 0 ]
-      set_caret [ writer3, 0 ]
-      set_caret [ writer4, 0 ]
+      set_caret [ writer2, 2 ]
+      set_caret [ writer3, 4 ]
+      set_caret [ writer4, 6 ]
 
       wait 1
 

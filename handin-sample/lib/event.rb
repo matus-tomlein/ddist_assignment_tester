@@ -29,7 +29,6 @@ class Event
   end
 
   def self.new(args)
-    args[:time] = Time.now unless args[:time]
     OpenStruct.new(args)
   end
 end
