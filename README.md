@@ -6,6 +6,11 @@ University (spring 2015).
 The main goal of the project is to help me (TA at the course) evaluate the
 hand-ins.
 
+# Overview of the tester
+
+To get an overview of how the tester works and how to use it,
+[see slides from a presentation](docs/presentation.pdf).
+
 # Installation
 
 1. `cd` into the project
