@@ -73,9 +73,9 @@ class Commander
       text_on_client = read [client]
       text_on_server = read [server]
 
-      raise "Text on client and server are different" if text_on_client != text_on_server
       raise "Text on client is garbled" unless text_on_client.include? write_client
       raise "Text on server is garbled" unless text_on_server.include? write_server
+      raise "Text on client and server are different" if text_on_client != text_on_server
     end
 
     testing "writing really close together - 1 space apart" do
@@ -93,9 +93,9 @@ class Commander
       text_on_client = read [client]
       text_on_server = read [server]
 
-      raise "Text on client and server are different" if text_on_client != text_on_server
       raise "Text on client is garbled" unless text_on_client.include? write_client
       raise "Text on server is garbled" unless text_on_server.include? write_server
+      raise "Text on client and server are different" if text_on_client != text_on_server
     end
 
     testing "writing in the same place" do
@@ -113,9 +113,8 @@ class Commander
       text_on_client = read [client]
       text_on_server = read [server]
 
-      raise "Text on client and server are different" if text_on_client != text_on_server
-      raise "Text on client is garbled" unless text_on_client.include? write_client
-      raise "Text on server is garbled" unless text_on_server.include? write_server
+      raise "Text on client is garbled: #{text_on_client}" unless text_on_client.include? write_client
+      raise "Text on server is garbled: #{text_on_server}" unless text_on_server.include? write_server
     end
 
     shutdown [ client ]
