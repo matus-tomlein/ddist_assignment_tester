@@ -8,14 +8,20 @@ module TestHelper
     puts
     puts "Testing #{description}".bold
     begin
+      DataCollection.start_test(description)
+
       t1 = Time.now
       yield
       delta = Time.now - t1
 
       @testing_time += delta
       puts "OK, #{delta/1000} s".green
+
+      DataCollection.end_test(description, true)
     rescue => ex
       puts "Error: #{ex.message}".red
+
+      DataCollection.end_test(description, false, ex.message)
       @failures += 1
       return false
     end

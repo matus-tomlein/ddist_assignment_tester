@@ -4,12 +4,17 @@ require 'cgi'
 
 require_relative 'helpers'
 require_relative 'time_keeper'
+require_relative 'data_collection'
 
 class Commander
   attr_reader :connections, :server
 
   include TestHelper
   include ConnectionHelper
+
+  def self.running_test(name = '')
+    @running_test ||= name
+  end
 
   def initialize
     initialize_connections

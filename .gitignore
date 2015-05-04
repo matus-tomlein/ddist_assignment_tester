@@ -2,6 +2,7 @@ bin/
 handin/
 handin-compiled/
 *.class
+.data_collection_id
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

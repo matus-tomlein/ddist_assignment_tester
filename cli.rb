@@ -17,6 +17,7 @@ class Cli
       cmd_name = args.shift
 
       if commander.class.method_defined? cmd_name
+        Commander.running_test(cmd_name)
         commander.send cmd_name.to_sym, args
       else
         puts 'Unknown command'
@@ -24,6 +25,8 @@ class Cli
     end
   end
 end
+
+DataCollection.init
 
 # Start the CLI interface
 Cli.new(Commander.new).run
