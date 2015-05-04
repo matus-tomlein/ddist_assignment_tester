@@ -46,8 +46,8 @@ class Commander
       t_client.join
       t_server.join
 
-      text_on_client = read [client]
-      text_on_server = read [server]
+      text_on_client = read_area1 [client]
+      text_on_server = read_area1 [server]
 
       if text_on_server != expected_result
         raise "Text on server is wrong: #{text_on_server} instead of #{expected_result}"
@@ -70,8 +70,8 @@ class Commander
       t_client.join
       t_server.join
 
-      text_on_client = read [client]
-      text_on_server = read [server]
+      text_on_client = read_area1 [client]
+      text_on_server = read_area1 [server]
 
       raise "Text on client is garbled" unless text_on_client.include? write_client
       raise "Text on server is garbled" unless text_on_server.include? write_server
@@ -90,8 +90,8 @@ class Commander
       t_client.join
       t_server.join
 
-      text_on_client = read [client]
-      text_on_server = read [server]
+      text_on_client = read_area1 [client]
+      text_on_server = read_area1 [server]
 
       raise "Text on client is garbled" unless text_on_client.include? write_client
       raise "Text on server is garbled" unless text_on_server.include? write_server
@@ -110,8 +110,8 @@ class Commander
       t_client.join
       t_server.join
 
-      text_on_client = read [client]
-      text_on_server = read [server]
+      text_on_client = read_area1 [client]
+      text_on_server = read_area1 [server]
 
       raise "Text on client is garbled: #{text_on_client}" unless text_on_client.include? write_client
       raise "Text on server is garbled: #{text_on_server}" unless text_on_server.include? write_server

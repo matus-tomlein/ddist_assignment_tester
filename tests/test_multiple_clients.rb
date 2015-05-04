@@ -14,7 +14,7 @@ class Commander
       sleep 2
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Wrong text: #{read_text} instead of #{text}" unless read_text.include? text
       end
     end
@@ -25,7 +25,7 @@ class Commander
       sleep 2
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Wrong text: #{read_text} instead of #{text}" unless read_text.include? text
       end
     end

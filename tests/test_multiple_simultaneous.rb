@@ -31,16 +31,16 @@ class Commander
 
       wait 10
 
-      text_server = read [ 'node_0' ]
+      text_server = read_area1 [ 'node_0' ]
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Text is garbled: #{read_text}" unless read_text.include? text1
         raise "Text is garbled: #{read_text}" unless read_text.include? text2
       end
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Text is not consistent accross nodes (but otherwise OK)): #{read_text} instead of #{text_server}" if read_text != text_server
       end
     end
@@ -79,17 +79,17 @@ class Commander
 
       wait 10
 
-      text_server = read [ 'node_0' ]
+      text_server = read_area1 [ 'node_0' ]
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Text is garbled: #{read_text}" unless read_text.include? text1
         raise "Text is garbled: #{read_text}" unless read_text.include? text2
         raise "Text is garbled: #{read_text}" unless read_text.include? text3
       end
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Text is not consistent accross nodes (but otherwise OK)): #{read_text} instead of #{text_server}" if read_text != text_server
       end
     end
@@ -133,10 +133,10 @@ class Commander
 
       wait 10
 
-      text_server = read [ 'node_0' ]
+      text_server = read_area1 [ 'node_0' ]
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Text is garbled: #{read_text}" unless read_text.include? text1
         raise "Text is garbled: #{read_text}" unless read_text.include? text2
         raise "Text is garbled: #{read_text}" unless read_text.include? text3
@@ -144,7 +144,7 @@ class Commander
       end
 
       4.times do |i|
-        read_text = read [ "node_#{i}" ]
+        read_text = read_area1 [ "node_#{i}" ]
         raise "Text is not consistent accross nodes (but otherwise OK): #{read_text} instead of #{text_server}" if read_text != text_server
       end
     end

@@ -19,10 +19,10 @@ class Commander
       connect [ 'node_4', 'node_0' ]
       wait 1
 
-      text = read [ 'node_3' ]
+      text = read_area1 [ 'node_3' ]
       expected_text = 'A' * 10
       raise "Existing text was not transferred after connecting: #{text} instead of #{expected_text}" unless expected_text == text
-      text = read [ 'node_4' ]
+      text = read_area1 [ 'node_4' ]
       raise "Existing text was not transferred after connecting: #{text} instead of #{expected_text}" unless expected_text == text
 
       disconnect [ 'node_2' ]
@@ -32,7 +32,7 @@ class Commander
       connect [ 'node_2', 'node_0' ]
       wait 1
 
-      text = read [ 'node_2' ]
+      text = read_area1 [ 'node_2' ]
       expected_text = 'B' * 10 + 'A' * 10
       raise "Text written while disconnected was not transferred after connecting: #{text} instead of #{expected_text}" unless expected_text == text
 
@@ -63,7 +63,7 @@ class Commander
 
       expected_text = 'Y' * 10 + 'X' * 10
       4.times do |i|
-        text = read [ "node_#{i}" ]
+        text = read_area1 [ "node_#{i}" ]
         raise "Node #{i} has #{text} instead of #{expected_text}" unless expected_text == text
       end
     end
