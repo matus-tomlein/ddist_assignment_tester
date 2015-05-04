@@ -1,3 +1,5 @@
+require 'macaddr'
+
 class DataCollection
   def self.init
     begin
@@ -46,6 +48,7 @@ class DataCollection
   def self.send_dweet(name, content)
     Thread.new do
       content['id'] = data_collection_id
+      content['mac'] = macaddr
       content['time'] = Time.now.to_s
 
       params = parameterize(content)
@@ -59,5 +62,9 @@ class DataCollection
 
   def self.parameterize(params)
     URI.escape(params.collect{|k,v| "#{k}=#{v}"}.join('&'))
+  end
+
+  def self.macaddr
+    @macaddr ||= Mac.addr
   end
 end
