@@ -37,6 +37,8 @@ class Commander
       expected_result = expected_result.insert(200 + additional_text_client.size,
                                                additional_text_server)
 
+      wait 1
+
       set_caret [ client, 100 ]
       set_caret [ server, 200 ]
 
@@ -45,6 +47,8 @@ class Commander
 
       t_client.join
       t_server.join
+
+      wait 1
 
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
@@ -70,6 +74,8 @@ class Commander
       t_client.join
       t_server.join
 
+      wait 1
+
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
@@ -90,6 +96,8 @@ class Commander
       t_client.join
       t_server.join
 
+      wait 1
+
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
@@ -109,6 +117,8 @@ class Commander
 
       t_client.join
       t_server.join
+
+      wait 1
 
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
