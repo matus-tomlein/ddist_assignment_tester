@@ -1,0 +1,36 @@
+Welcome to the automated hand-in tester!
+
+From here, you can start the test scripts to test your hand-in.
+These are the tests that you can run:
+
+- Test 1:
+  - exchanging messages, connecting and disconnecting from the server
+  - run pt1 to start up, then run t1
+- Test 2:
+  - writing on the client and server at the same time (with 2 text areas)
+  - run pt2 to start up, then run t2
+- Test 3:
+  - test crashing the client and reconnecting to the server
+  - run pt3 to start up, then run t3
+- Test simultaneous editing:
+  - writing on the client and server at the same time (same text area)
+  - second hand-in
+  - run pts to start up, then run ts
+- Test for latency:
+  - Measures the delay after a character is written and shown (not very reliable)
+  - run ptl to start up, then tl
+- Test for multiple clients:
+  - multiple clients, exchanging messages
+  - third hand-in
+  - run ptmc to start up, then tmc
+- Test for multiple simultaneous editings:
+  - Simultaneous editing on 2, 3 and 4 nodes
+  - run ptms to start up, then tms (or tms2, tms3 or tms4)
+- Test for churn
+  - Connecting, disconnecting clients and the server
+  - run ptc to start up, then tc
+
+In case of problems, consult README.md and docs/presentation.pdf.
+Or ask me (matus@cs.au.dk, Hopper 127).
+
+Cheers, Matus
