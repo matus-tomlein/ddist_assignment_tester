@@ -84,7 +84,7 @@ module TestHelper
 
   def start_tester(port, handin_path)
     log_path = "log/node_#{port}.log"
-    puts "Output from node with port #{port} will be saved to file #{log_path}. ".blue
+    print "Output from node with port #{port} will be saved to file #{log_path}.\n".blue
     `bin/jruby-1.7.19/bin/jruby tester.rb #{port} #{handin_path} > #{log_path} 2>&1`
   end
 end
