@@ -20,6 +20,10 @@ class Commander
     initialize_connections
   end
 
+  def tests(args)
+    puts (File.read 'docs/tests.txt').blue
+  end
+
   def add(args)
     host = args.shift
     port = args.shift.to_i

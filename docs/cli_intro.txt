@@ -1,0 +1,9 @@
+Welcome to the automated hand-in tester!
+
+From here, you can start the test scripts to test your hand-in.
+Type 'tests' to see an overview of the available tests.
+
+In case of problems, consult README.md and docs/presentation.pdf.
+Or ask me: matus@cs.au.dk, Hopper 127.
+
+Cheers, Matus

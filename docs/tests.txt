@@ -1,6 +1,3 @@
-Welcome to the automated hand-in tester!
-
-From here, you can start the test scripts to test your hand-in.
 These are the tests that you can run:
 
 - Test 1:
@@ -29,8 +26,3 @@ These are the tests that you can run:
 - Test for churn
   - Connecting, disconnecting clients and the server
   - run ptc to start up, then tc
-
-In case of problems, consult README.md and docs/presentation.pdf.
-Or ask me (matus@cs.au.dk, Hopper 127).
-
-Cheers, Matus

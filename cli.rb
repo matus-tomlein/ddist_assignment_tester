@@ -1,5 +1,5 @@
 require 'colored'
-puts (File.read 'cli_intro.txt').blue
+puts (File.read 'docs/cli_intro.txt').blue
 
 require_relative 'lib/commander'
 Dir["tests/*.rb"].each {|file| require file }
