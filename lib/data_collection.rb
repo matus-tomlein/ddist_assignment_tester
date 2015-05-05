@@ -45,19 +45,31 @@ class DataCollection
 
   private
 
-  def self.send_dweet(name, content)
-    Thread.new do
-      content['id'] = data_collection_id
-      content['mac'] = macaddr
-      content['time'] = Time.now.to_s
+  def self.start_processing_the_queue
+    return if @processing_thread
 
-      params = parameterize(content)
-      begin
-        open("https://dweet.io/dweet/for/ddist2015-#{name}?#{params}").read
-      rescue => ex
-        puts "Failed collecting data #{ex.message}"
+    @request_queue = Queue.new
+    @processing_thread = Thread.new do
+      loop do
+        url = @request_queue.pop
+        begin
+          open(url).read
+        rescue => ex
+          puts "Failed collecting data #{ex.message}"
+        end
       end
     end
+  end
+
+  def self.send_dweet(name, content)
+    start_processing_the_queue
+
+    content['id'] = data_collection_id
+    content['mac'] = macaddr
+    content['time'] = Time.now.to_s
+
+    params = parameterize(content)
+    @request_queue << "https://dweet.io/dweet/for/ddist2015-#{name}?#{params}"
   end
 
   def self.parameterize(params)
