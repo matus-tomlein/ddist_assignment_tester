@@ -43,6 +43,10 @@ class DataCollection
     })
   end
 
+  def self.feedback(message)
+    send_dweet('feedback', { 'msg' => message })
+  end
+
   private
 
   def self.start_processing_the_queue

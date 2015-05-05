@@ -15,6 +15,7 @@ class Cli
     loop do
       cmd = gets.chomp
       break if cmd == 'exit'
+      next if cmd == ''
 
       args = cmd.split
       cmd_name = args.shift

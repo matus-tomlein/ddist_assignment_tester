@@ -6,4 +6,6 @@ Type 'tests' to see an overview of the available tests.
 In case of problems, consult README.md and docs/presentation.pdf.
 Or ask me: matus@cs.au.dk, Hopper 127.
 
+To leave feedback, type: matus YOUR MESSAGE (e.g. matus the tests are killing me)
+
 Cheers, Matus

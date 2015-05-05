@@ -96,6 +96,16 @@ class Commander
     @debug = true
   end
 
+  def matus(args)
+    unless args.any?
+      puts 'What?'
+    else
+      msg = args.join ' '
+      DataCollection.feedback msg
+      puts 'Totally!'
+    end
+  end
+
   private
 
   def listen_and_update_port(server)
