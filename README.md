@@ -21,7 +21,7 @@ To get an overview of how the tester works and how to use it,
 
 # Usage
 
-Running `ruby cli.rb` will open a command-line interface that allows you to
+Running `bin/jruby-1.7.19/bin/jruby cli.rb` will open a command-line interface that allows you to
 connect to execute tests.
 The easiest way to execute a test is for instance to run:
 
