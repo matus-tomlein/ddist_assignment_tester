@@ -12,8 +12,9 @@ class Commander
   include TestHelper
   include ConnectionHelper
 
-  def self.running_test(name = '')
-    @running_test ||= name
+  def self.running_test(name = nil)
+    @running_test = name if name
+    @running_test ||= ''
   end
 
   def initialize
