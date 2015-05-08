@@ -4,6 +4,8 @@ class Commander
 
     connect_client_and_server client, server
     synchronize_time [ client, server ]
+    start_watching_content [ client ]
+    start_watching_content [ server ]
 
     testing 'measuring the latency writing on server' do
       write [ 0, server, 'X' * 100 ]

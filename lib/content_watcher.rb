@@ -5,6 +5,8 @@ class ContentWatcher
   end
 
   def start_watching
+    return if @watching
+    @watching = true
     Thread.new do
       loop do
         content = @text_area.getText

@@ -124,6 +124,10 @@ class Commander
     end
   end
 
+  def start_watching_content(args)
+    get args.first, '/start_watching_content'
+  end
+
   private
 
   def listen_and_update_port(server)
