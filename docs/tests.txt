@@ -9,8 +9,12 @@ These are the tests that you can run:
 - Test 3:
   - test crashing the client and reconnecting to the server
   - run pt3 to start up, then run t3
+- Test simultaneous editing speed:
+  - writing on the client and server at the same time at varying speeds
+  - second hand-in
+  - run ptss to start up, then run tss
 - Test simultaneous editing:
-  - writing on the client and server at the same time (same text area)
+  - writing on the client and server at the same time at varying distances
   - second hand-in
   - run pts to start up, then run ts
 - Test for latency:

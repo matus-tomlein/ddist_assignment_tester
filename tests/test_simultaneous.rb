@@ -1,8 +1,6 @@
 # Tests writing on client and server to the same text area at the same time
 # For solutions that have one shared text area that both the client and the
 # server write to
-# I am not sure if the test is working, haven't yet tested it on a working
-# solution
 class Commander
   def test_simultaneous(args)
     server, client = if args.length == 2

@@ -28,7 +28,7 @@ class Simulator
     upper_text_area.setCaretPosition(caret.to_i)
   end
 
-  def write_in_text_area(text, caret, speed = 0.03)
+  def write_in_text_area(text, caret, speed = 0.05)
     upper_text_area.requestFocus
     set_caret_position(caret) if caret && caret.to_i >= 0
 

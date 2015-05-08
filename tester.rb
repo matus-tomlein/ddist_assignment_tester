@@ -20,7 +20,11 @@ Compiler.run(handin_path) do |editor_access|
 
   get '/write' do
     protect_me do
-      simulator.write_in_text_area params['msg'], params['caret']
+      if params['speed']
+        simulator.write_in_text_area params['msg'], params['caret'], params['speed'].to_f
+      else
+        simulator.write_in_text_area params['msg'], params['caret']
+      end
     end
   end
 

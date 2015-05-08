@@ -9,6 +9,12 @@ require_relative 'data_collection'
 class Commander
   attr_reader :connections, :server
 
+  SLOW_TYPING = 0.2
+  SLOWER_TYPING = 0.1
+  LESS_SLOWER_TYPING = 0.08
+  FAST_TYPING = 0.05
+  REALLY_FAST_TYPING = 0.01
+
   include TestHelper
   include ConnectionHelper
 
@@ -71,6 +77,17 @@ class Commander
 
   def read(args)
     get args.shift, '/read'
+  end
+
+  def write_with_speed(args)
+    caret = args.shift.to_i
+    client = args.shift
+    speed = args.shift.to_f
+    get client, '/write', {
+      caret: caret,
+      speed: speed,
+      msg: args.join(' ')
+    }
   end
 
   def write(args)
