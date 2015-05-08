@@ -1,6 +1,10 @@
+$CLASSPATH << 'lib/java'
 java_import 'java.awt.Component'
+java_import 'CustomTextArea'
 
 class TextArea < Component
+  include CustomTextArea
+
   attr_reader :editor, :caret_position
 
   def init(editor)
@@ -8,20 +12,16 @@ class TextArea < Component
     self
   end
 
-  def dispatchEvent(key_event)
-    if key_event.getID == KeyEvent::KEY_TYPED
-      char = key_event.getKeyChar.chr
+  def keyTyped(ch)
+    char = ch.chr
 
-      relative_position = RelativePosition.generate_key
-      event = Event.relative_write(editor.key,
-                                   relative_position,
-                                   nil,
-                                   char)
-      editor.process_event(event)
-    elsif key_event.getID == KeyEvent::KEY_RELEASED and
-      key_event.getKeyCode == KeyEvent::VK_RIGHT
-      editor.process_event(Event.move_caret_right(editor.key))
-    end
+    relative_position = RelativePosition.generate_key
+    event = Event.relative_write(editor.key,
+                                 relative_position,
+                                 nil,
+                                 char)
+    editor.process_event(event)
+    editor.process_event(Event.move_caret_right(editor.key))
   end
 
   def getText

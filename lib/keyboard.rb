@@ -1,39 +1,23 @@
-java_import 'java.lang.System'
-java_import 'java.awt.event.KeyEvent'
+$CLASSPATH << 'lib/java'
+java_import 'KeyboardImpl'
+java_import 'KeyboardListener'
 
 class Keyboard
-  attr_reader :text_area
+  attr_reader :java_keyboard
 
   def initialize(text_area)
-    @text_area = text_area
+    @java_keyboard = KeyboardImpl.new(text_area, KeyboardListenerImpl.new)
   end
 
   def type_string(text, speed)
-    text.split("").each do |char|
-      type_char char
-      sleep(speed) if speed
-    end
+    java_keyboard.typeString(text, (speed * 1000).to_i)
   end
+end
 
-  def type_char(char)
-    upper = char.upcase == char
-    modifiers = upper ? KeyEvent::VK_SHIFT : 0
+class KeyboardListenerImpl
+  include KeyboardListener
 
-    EventHistory.log_event({ type: :typing,
-                             char: char })
-
-    text_area.dispatchEvent(KeyEvent.new(
-      text_area,
-      KeyEvent::KEY_TYPED, 0,
-      modifiers, KeyEvent::VK_UNDEFINED, char[0].ord))
-
-    sleep 0.001
-    text_area.dispatchEvent(KeyEvent.new(text_area,
-                                         KeyEvent::KEY_PRESSED, 0,
-                                         0, KeyEvent::VK_RIGHT))
-    sleep 0.001
-    text_area.dispatchEvent(KeyEvent.new(text_area,
-                                         KeyEvent::KEY_RELEASED, 0,
-                                         0, KeyEvent::VK_RIGHT))
+  def logKeyPress(ch)
+    EventHistory.log_event({ type: :typing, char: ch.to_s })
   end
 end
