@@ -3,6 +3,7 @@ require 'sinatra'
 require 'json'
 require 'ostruct'
 
+require_relative 'lib/java_classes'
 require_relative 'lib/compiler'
 require_relative 'lib/simulator'
 require_relative 'lib/time_keeper'

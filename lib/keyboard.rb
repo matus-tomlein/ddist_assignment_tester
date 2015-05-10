@@ -1,4 +1,3 @@
-$CLASSPATH << 'lib/java'
 java_import 'KeyboardImpl'
 java_import 'KeyboardListener'
 
