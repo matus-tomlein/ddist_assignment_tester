@@ -9,30 +9,11 @@ class Commander
                        ['0', '1']
                      end
 
-    t_listen = Thread.new do
-      testing 'starting listening on server' do
-        listen_and_update_port server
-      end
-    end
-    wait 3
-
-    t_connect = Thread.new do
-      testing 'connecting client to server' do
-        connect [client, server]
-      end
-    end
-    wait 1
-
-    t_listen.join
-    t_connect.join
+    start_up(client, server)
 
     testing "writing on the client and server at the same time, far apart" do
-      starting_text = 'A' * 200
-      write [ 0, client, starting_text ]
       additional_text_client = 'bB' * 100
       additional_text_server = 'cC' * 100
-
-      wait 1
 
       set_caret [ client, 50 ]
       set_caret [ server, 150 ]
@@ -50,6 +31,9 @@ class Commander
 
       compare_texts(text_on_client, text_on_server, 'bB', 100, 'cC', 100)
     end
+
+    finish(client, server)
+    start_up(client, server)
 
     testing "writing closer together" do
       set_caret [ client, 10 ]
@@ -71,6 +55,9 @@ class Commander
       compare_texts(text_on_client, text_on_server, 'xX', 100, 'yY', 100)
     end
 
+    finish(client, server)
+    start_up(client, server)
+
     testing "writing really close together - 1 space apart" do
       set_caret [ client, 0 ]
       set_caret [ server, 1 ]
@@ -90,6 +77,9 @@ class Commander
 
       compare_texts(text_on_client, text_on_server, 'mM', 100, 'nN', 100)
     end
+
+    finish(client, server)
+    start_up(client, server)
 
     testing "writing in the same place" do
       set_caret [ client, 0 ]
@@ -117,6 +107,22 @@ class Commander
     overview
   end
   alias_method :ts, :test_simultaneous
+
+  def start_up(client, server)
+    connect_client_and_server(client, server)
+
+    testing 'writing the initial text' do
+      starting_text = 'A' * 200
+      write [ 0, client, starting_text ]
+      wait 1
+    end
+  end
+
+  def finish(client, server)
+    testing 'disconnecting' do
+      disconnect [ server ]
+    end
+  end
 
   def prepare_test_simultaneous(args)
     handin_path = 'handin'
