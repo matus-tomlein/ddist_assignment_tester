@@ -17,7 +17,7 @@ To get an overview of how the tester works and how to use it,
 2. Copy your solution to a folder called `handin`
 3. `bin/jruby-1.7.19/bin/jruby cli.rb`
 
-  - if that fails, try running: `bin/jruby-1.7.19/bin/jruby -S gem install colored json sinatra macaddr`
+  - if that fails, try running: `bin/jruby-1.7.19/bin/jruby -S gem install colored json sinatra macaddr levenshtein-jruby`
 
 # Usage
 
