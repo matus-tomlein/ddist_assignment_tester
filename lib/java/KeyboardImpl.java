@@ -13,20 +13,7 @@ public class KeyboardImpl {
   private CustomTextArea customTextArea;
   private KeyboardListener listener;
 
-  public KeyboardImpl(JTextArea textArea, KeyboardListener listener) {
-    final DefaultCaret caret = new DefaultCaret();
-    caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-    textArea.setCaret(caret);
-
-    this.textArea = textArea;
-    this.listener = listener;
-  }
-
-  public KeyboardImpl(JTextPane textArea, KeyboardListener listener) {
-    final DefaultCaret caret = new DefaultCaret();
-    caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-    textArea.setCaret(caret);
-
+  public KeyboardImpl(Component textArea, KeyboardListener listener) {
     this.textArea = textArea;
     this.listener = listener;
   }
@@ -54,10 +41,26 @@ public class KeyboardImpl {
     listener.logKeyPress(ch);
 
     if (textArea != null)
+      java.awt.EventQueue.invokeLater(new TypeKeyInTextArea(textArea, ch, modifiers));
+    else
+      customTextArea.keyTyped(ch);
+  }
+
+  class TypeKeyInTextArea implements Runnable {
+    Component textArea;
+    char ch;
+    int modifiers;
+
+    TypeKeyInTextArea(Component textArea, char ch, int modifiers) {
+      this.textArea = textArea;
+      this.ch = ch;
+      this.modifiers = modifiers;
+    }
+
+    public void run() {
       textArea.dispatchEvent(new KeyEvent(textArea,
             KeyEvent.KEY_TYPED, 0,
             modifiers, KeyEvent.VK_UNDEFINED, ch));
-    else
-      customTextArea.keyTyped(ch);
+    }
   }
 }
