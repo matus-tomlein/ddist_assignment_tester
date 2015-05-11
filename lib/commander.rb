@@ -5,6 +5,7 @@ require 'cgi'
 require_relative 'helpers'
 require_relative 'time_keeper'
 require_relative 'data_collection'
+require_relative 'string_distance'
 
 class Commander
   attr_reader :connections, :server

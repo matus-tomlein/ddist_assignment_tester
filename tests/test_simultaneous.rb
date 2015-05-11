@@ -31,9 +31,6 @@ class Commander
       write [ 0, client, starting_text ]
       additional_text_client = 'B' * 200
       additional_text_server = 'C' * 200
-      expected_result = starting_text.insert 100, additional_text_client
-      expected_result = expected_result.insert(200 + additional_text_client.size,
-                                               additional_text_server)
 
       wait 1
 
@@ -51,21 +48,15 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      if text_on_server != expected_result
-        raise "Text on server is wrong: #{text_on_server} instead of #{expected_result}"
-      end
-
-      if text_on_client != expected_result
-        raise "Text on client is wrong: #{text_on_client} instead of #{expected_result}"
-      end
+      compare_texts(text_on_client, text_on_server, 'B', 200, 'C', 200)
     end
 
     testing "writing closer together" do
       set_caret [ client, 10 ]
       set_caret [ server, 20 ]
 
-      write_client = 'DENMARK' * 20
-      write_server = 'SLOVAKIA' * 20
+      write_client = 'DENMARK' * 40
+      write_server = 'SLOVAKIA' * 40
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -77,17 +68,15 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      raise "Text on client is garbled" unless text_on_client.include? write_client
-      raise "Text on server is garbled" unless text_on_server.include? write_server
-      raise "Text on client and server are different" if text_on_client != text_on_server
+      compare_texts(text_on_client, text_on_server, 'DENMARK', 40, 'SLOVAKIA', 40)
     end
 
     testing "writing really close together - 1 space apart" do
       set_caret [ client, 0 ]
       set_caret [ server, 1 ]
 
-      write_client = 'KRASA' * 20
-      write_server = 'UZASNE' * 20
+      write_client = 'KRASA' * 40
+      write_server = 'UZASNE' * 40
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -99,17 +88,15 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      raise "Text on client is garbled" unless text_on_client.include? write_client
-      raise "Text on server is garbled" unless text_on_server.include? write_server
-      raise "Text on client and server are different" if text_on_client != text_on_server
+      compare_texts(text_on_client, text_on_server, 'KRASA', 40, 'UZASNE', 40)
     end
 
     testing "writing in the same place" do
       set_caret [ client, 0 ]
       set_caret [ server, 0 ]
 
-      write_client = 'FANTAZIA' * 20
-      write_server = 'POHODA' * 20
+      write_client = 'FANTAZIA' * 40
+      write_server = 'POHODA' * 40
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -121,8 +108,7 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      raise "Text on client is garbled: #{text_on_client}" unless text_on_client.include? write_client
-      raise "Text on server is garbled: #{text_on_server}" unless text_on_server.include? write_server
+      compare_texts(text_on_client, text_on_server, 'FANTAZIA', 40, 'POHODA', 40)
     end
 
     shutdown [ client ]

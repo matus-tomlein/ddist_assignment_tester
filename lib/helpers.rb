@@ -87,6 +87,39 @@ module TestHelper
     print "Output from node with port #{port} will be saved to file #{log_path}.\n".blue
     `bin/jruby-1.7.19/bin/jruby tester.rb #{port} #{handin_path} > #{log_path} 2>&1`
   end
+
+  def compare_texts(text_on_client, text_on_server, client_unit, client_repetitions, server_unit, server_repetitions)
+    errors = []
+    write_client = client_unit * client_repetitions
+    write_server = server_unit * server_repetitions
+
+    if text_on_client != text_on_server
+      dst = StringDistance.calculate_distance(text_on_client, text_on_server)
+      errors << "Text on client and server are different: Levenshtein distance is #{dst} edits"
+    end
+
+    unless text_on_client.include? write_client
+      percentage = calculate_percentage_of_included_repetitions(text_on_client, client_unit, client_repetitions)
+      errors << "Text on client is garbled: contains #{percentage}% of written text"
+    end
+
+    unless text_on_server.include? write_server
+      percentage = calculate_percentage_of_included_repetitions(text_on_server, server_unit, server_repetitions)
+      errors << "Text on server is garbled: contains #{percentage}% of written text"
+    end
+
+    raise errors.join("\n") if errors.any?
+  end
+
+  def calculate_percentage_of_included_repetitions(text, unit, repetitions)
+    repetitions.downto(1).each do |i|
+      if text.include?(unit * i)
+        return i.to_f / repetitions * 100
+      end
+    end
+
+    return 0
+  end
 end
 
 module ConnectionHelper

@@ -73,10 +73,7 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      raise "Text on server and client are not the same: #{text_on_server} and #{text_on_client}" if text_on_server != text_on_client
-
-      raise "Text on client is garbled: #{text_on_client} does not contain #{additional_text_client}" unless text_on_client.include? additional_text_client
-      raise "Text on server is garbled: #{text_on_server} does not contain #{additional_text_server}" unless text_on_server.include? additional_text_server
+      compare_texts(text_on_client, text_on_server, 'bB', 50, 'cC', 50)
     end
   end
 
