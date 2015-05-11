@@ -108,17 +108,17 @@ module TestHelper
       errors << "Text on server is garbled: contains #{percentage}% of written text"
     end
 
-    raise errors.join("\n") if errors.any?
+    if errors.any?
+      puts "Text on client: #{text_on_client}".blue
+      puts "Should have contained: #{write_client}".blue
+      puts "Text on server: #{text_on_server}".blue
+      puts "Should have contained: #{write_server}".blue
+      raise errors.join("\n")
+    end
   end
 
   def calculate_percentage_of_included_repetitions(text, unit, repetitions)
-    repetitions.downto(1).each do |i|
-      if text.include?(unit * i)
-        return i.to_f / repetitions * 100
-      end
-    end
-
-    return 0
+    text.scan(unit).count.to_f / repetitions * 100
   end
 end
 

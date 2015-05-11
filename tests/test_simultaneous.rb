@@ -27,15 +27,15 @@ class Commander
     t_connect.join
 
     testing "writing on the client and server at the same time, far apart" do
-      starting_text = 'A' * 300
+      starting_text = 'A' * 200
       write [ 0, client, starting_text ]
-      additional_text_client = 'B' * 200
-      additional_text_server = 'C' * 200
+      additional_text_client = 'bB' * 100
+      additional_text_server = 'cC' * 100
 
       wait 1
 
-      set_caret [ client, 100 ]
-      set_caret [ server, 200 ]
+      set_caret [ client, 50 ]
+      set_caret [ server, 150 ]
 
       t_client = Thread.new { write [-1, client, additional_text_client] }
       t_server = Thread.new { write [-1, server, additional_text_server] }
@@ -48,15 +48,15 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'B', 200, 'C', 200)
+      compare_texts(text_on_client, text_on_server, 'bB', 100, 'cC', 100)
     end
 
     testing "writing closer together" do
       set_caret [ client, 10 ]
       set_caret [ server, 20 ]
 
-      write_client = 'DENMARK' * 40
-      write_server = 'SLOVAKIA' * 40
+      write_client = 'xX' * 100
+      write_server = 'yY' * 100
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -68,15 +68,15 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'DENMARK', 40, 'SLOVAKIA', 40)
+      compare_texts(text_on_client, text_on_server, 'xX', 100, 'yY', 100)
     end
 
     testing "writing really close together - 1 space apart" do
       set_caret [ client, 0 ]
       set_caret [ server, 1 ]
 
-      write_client = 'KRASA' * 40
-      write_server = 'UZASNE' * 40
+      write_client = 'mM' * 100
+      write_server = 'nN' * 100
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -88,15 +88,15 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'KRASA', 40, 'UZASNE', 40)
+      compare_texts(text_on_client, text_on_server, 'mM', 100, 'nN', 100)
     end
 
     testing "writing in the same place" do
       set_caret [ client, 0 ]
       set_caret [ server, 0 ]
 
-      write_client = 'FANTAZIA' * 40
-      write_server = 'POHODA' * 40
+      write_client = 'fF' * 100
+      write_server = 'gG' * 100
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -108,7 +108,7 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'FANTAZIA', 40, 'POHODA', 40)
+      compare_texts(text_on_client, text_on_server, 'fF', 100, 'gG', 100)
     end
 
     shutdown [ client ]
