@@ -9,7 +9,7 @@ class Commander
                        ['0', '1']
                      end
 
-    start_up(client, server)
+    ts_start_up(client, server)
 
     testing "writing on the client and server at the same time, far apart" do
       additional_text_client = 'bB' * 100
@@ -33,7 +33,7 @@ class Commander
     end
 
     finish(client, server)
-    start_up(client, server)
+    ts_start_up(client, server)
 
     testing "writing closer together" do
       set_caret [ client, 10 ]
@@ -56,7 +56,7 @@ class Commander
     end
 
     finish(client, server)
-    start_up(client, server)
+    ts_start_up(client, server)
 
     testing "writing really close together - 1 space apart" do
       set_caret [ client, 0 ]
@@ -79,7 +79,7 @@ class Commander
     end
 
     finish(client, server)
-    start_up(client, server)
+    ts_start_up(client, server)
 
     testing "writing in the same place" do
       set_caret [ client, 0 ]
@@ -108,7 +108,7 @@ class Commander
   end
   alias_method :ts, :test_simultaneous
 
-  def start_up(client, server)
+  def ts_start_up(client, server)
     connect_client_and_server(client, server)
 
     testing 'writing the initial text' do

@@ -7,7 +7,7 @@ class Commander
   alias_method :tms, :test_multiple_simultaneous
 
   def test_multiple_simultaneous_2(args)
-    start_up
+    tms_start_up
 
     testing '2 simultaneous editings' do
       writer1 = 'node_0'
@@ -50,7 +50,7 @@ class Commander
   alias_method :tms2, :test_multiple_simultaneous_2
 
   def test_multiple_simultaneous_3(args)
-    start_up
+    tms_start_up
 
     testing '3 simultaneous editings' do
       writer1 = 'node_0'
@@ -99,7 +99,7 @@ class Commander
   alias_method :tms3, :test_multiple_simultaneous_3
 
   def test_multiple_simultaneous_4(args)
-    start_up
+    tms_start_up
 
     testing '4 simultaneous editings' do
       writer1 = 'node_0'
@@ -157,7 +157,7 @@ class Commander
   end
   alias_method :tms4, :test_multiple_simultaneous_4
 
-  def start_up
+  def tms_start_up
     testing 'connecting the nodes' do
       listen [ 'node_0' ]
       connect [ 'node_1', 'node_0' ]
