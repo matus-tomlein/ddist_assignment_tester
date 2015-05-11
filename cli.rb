@@ -1,6 +1,7 @@
 require 'colored'
 puts (File.read 'docs/cli_intro.txt').blue
 
+require_relative 'lib/update_checker'
 require_relative 'lib/commander'
 Dir["tests/*.rb"].each {|file| require file }
 
@@ -31,6 +32,7 @@ class Cli
 end
 
 DataCollection.init
+UpdateChecker.check
 
 # Start the CLI interface
 Cli.new(Commander.new).run
