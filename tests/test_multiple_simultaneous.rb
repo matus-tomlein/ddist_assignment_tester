@@ -45,7 +45,7 @@ class Commander
       end
     end
 
-    finish
+    tms_finish
   end
   alias_method :tms2, :test_multiple_simultaneous_2
 
@@ -94,7 +94,7 @@ class Commander
       end
     end
 
-    finish
+    tms_finish
   end
   alias_method :tms3, :test_multiple_simultaneous_3
 
@@ -153,7 +153,7 @@ class Commander
       shutdown [ "node_#{i}" ]
     end
 
-    finish
+    tms_finish
   end
   alias_method :tms4, :test_multiple_simultaneous_4
 
@@ -167,7 +167,7 @@ class Commander
     end
   end
 
-  def finish
+  def tms_finish
     testing 'disconnecting' do
       4.times do |i|
         disconnect [ "node_#{i}" ]

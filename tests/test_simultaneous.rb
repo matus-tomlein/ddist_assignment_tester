@@ -32,7 +32,7 @@ class Commander
       compare_texts(text_on_client, text_on_server, 'bB', 100, 'cC', 100)
     end
 
-    finish(client, server)
+    ts_finish(client, server)
     ts_start_up(client, server)
 
     testing "writing closer together" do
@@ -55,7 +55,7 @@ class Commander
       compare_texts(text_on_client, text_on_server, 'xX', 100, 'yY', 100)
     end
 
-    finish(client, server)
+    ts_finish(client, server)
     ts_start_up(client, server)
 
     testing "writing really close together - 1 space apart" do
@@ -78,7 +78,7 @@ class Commander
       compare_texts(text_on_client, text_on_server, 'mM', 100, 'nN', 100)
     end
 
-    finish(client, server)
+    ts_finish(client, server)
     ts_start_up(client, server)
 
     testing "writing in the same place" do
@@ -118,7 +118,7 @@ class Commander
     end
   end
 
-  def finish(client, server)
+  def ts_finish(client, server)
     testing 'disconnecting' do
       disconnect [ server ]
     end
