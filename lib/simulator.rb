@@ -26,6 +26,7 @@ class Simulator
 
   def set_caret_position(caret)
     upper_text_area.setCaretPosition(caret.to_i)
+    @editor_access.carret_changed
   end
 
   def write_in_text_area(text, caret, speed = 0.05)

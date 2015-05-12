@@ -44,4 +44,10 @@ class SimulatedEditorAccess
   def current_port
     @port
   end
+
+  def carret_changed
+    if @simulated.respond_to? :carretChanged
+      @simulated.carretChanged
+    end
+  end
 end

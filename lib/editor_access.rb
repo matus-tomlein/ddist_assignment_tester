@@ -55,6 +55,8 @@ class EditorAccess
     editor._getPortNumberField.getText.to_i
   end
 
+  def carret_changed; end
+
   private
 
   def trigger_disconnect_action
