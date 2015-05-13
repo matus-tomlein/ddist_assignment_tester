@@ -100,21 +100,48 @@ module TestHelper
 
     unless text_on_client.include? write_client
       percentage = calculate_percentage_of_included_repetitions(text_on_client, client_unit, client_repetitions)
-      errors << "Text on client is garbled: contains #{percentage}% of written text"
+      errors << "Text on client is garbled: contains #{percentage}% of written text on client"
+    end
+
+    unless text_on_client.include? write_server
+      percentage = calculate_percentage_of_included_repetitions(text_on_client, server_unit, server_repetitions)
+      errors << "Text on client is garbled: contains #{percentage}% of written text on server"
     end
 
     unless text_on_server.include? write_server
       percentage = calculate_percentage_of_included_repetitions(text_on_server, server_unit, server_repetitions)
-      errors << "Text on server is garbled: contains #{percentage}% of written text"
+      errors << "Text on server is garbled: contains #{percentage}% of written text on server"
+    end
+
+    unless text_on_server.include? write_client
+      percentage = calculate_percentage_of_included_repetitions(text_on_server, client_unit, client_repetitions)
+      errors << "Text on server is garbled: contains #{percentage}% of written text on client"
     end
 
     if errors.any?
-      puts "Text on client: #{text_on_client}".blue
-      puts "Should have contained: #{write_client}".blue
-      puts "Text on server: #{text_on_server}".blue
-      puts "Should have contained: #{write_server}".blue
+      print "Text on client: ".blue
+      puts_output text_on_client, client_unit, server_unit
+      print "Text on server: ".blue
+      puts_output text_on_server, client_unit, server_unit
+      print "Actual text written on client: ".blue
+      puts write_client.blue.bold
+      print "Actual text written on server: ".blue
+      puts write_server.magenta.underline
       raise errors.join("\n")
     end
+  end
+
+  def puts_output(text, client_unit, server_unit)
+    text.each_char do |c|
+      if client_unit.include? c
+        print c.blue.bold
+      elsif server_unit.include? c
+        print c.magenta.underline
+      else
+        print c
+      end
+    end
+    puts
   end
 
   def calculate_percentage_of_included_repetitions(text, unit, repetitions)
