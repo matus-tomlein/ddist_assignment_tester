@@ -26,6 +26,7 @@ Thread.new do
   end
 end
 
+set :environment, :production
 set :port, port
 
 get '/write' do
