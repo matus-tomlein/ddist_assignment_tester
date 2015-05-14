@@ -33,6 +33,7 @@ class Commander
     end
 
     clear_text_area(client, server)
+    write_initial_text(client, server)
 
     testing "writing closer together" do
       set_caret [ client, 10 ]
@@ -55,6 +56,7 @@ class Commander
     end
 
     clear_text_area(client, server)
+    write_initial_text(client, server)
 
     testing "writing really close together - 1 space apart" do
       set_caret [ client, 0 ]
@@ -77,6 +79,7 @@ class Commander
     end
 
     clear_text_area(client, server)
+    write_initial_text(client, server)
 
     testing "writing in the same place" do
       set_caret [ client, 0 ]
@@ -107,7 +110,10 @@ class Commander
 
   def ts_start_up(client, server)
     connect_client_and_server(client, server)
+    write_initial_text(client, server)
+  end
 
+  def write_initial_text(client, server)
     testing 'writing the initial text' do
       starting_text = 'A' * 200
       write [ 0, client, starting_text ]
