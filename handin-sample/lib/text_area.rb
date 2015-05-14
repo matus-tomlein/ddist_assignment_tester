@@ -24,6 +24,12 @@ class TextArea < Component
     editor.process_event(Event.move_caret_right(editor.key))
   end
 
+  def deleteKeyPressed
+    position = editor.relative_position_by_key(editor.caret_key).next
+    raise 'No such position to delete' unless position
+    editor.process_event Event.relative_delete(editor.key, position.key)
+  end
+
   def getText
     @editor.content
   end

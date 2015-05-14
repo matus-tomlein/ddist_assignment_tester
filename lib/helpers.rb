@@ -147,6 +147,14 @@ module TestHelper
   def calculate_percentage_of_included_repetitions(text, unit, repetitions)
     text.scan(unit).count.to_f / repetitions * 100
   end
+
+  def clear_text_area(client, server)
+    testing 'clearing the text area' do
+      clear [ server ]
+      wait 1
+      raise 'Failed to clear' unless read([ client ]).empty?
+    end
+  end
 end
 
 module ConnectionHelper

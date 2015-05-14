@@ -13,13 +13,13 @@ class Commander
     connect_client_and_server(client, server)
 
     do_simultaneous_typing(client, server, SLOW_TYPING)
-    reconnect client, server
+    clear_text_area client, server
     do_simultaneous_typing(client, server, SLOWER_TYPING)
-    reconnect client, server
+    clear_text_area client, server
     do_simultaneous_typing(client, server, LESS_SLOWER_TYPING)
-    reconnect client, server
+    clear_text_area client, server
     do_simultaneous_typing(client, server, FAST_TYPING)
-    reconnect client, server
+    clear_text_area client, server
     do_simultaneous_typing(client, server, REALLY_FAST_TYPING)
 
     shutdown [ client ]
@@ -74,13 +74,6 @@ class Commander
       text_on_server = read_area1 [server]
 
       compare_texts(text_on_client, text_on_server, 'bB', 50, 'cC', 50)
-    end
-  end
-
-  def reconnect(client, server)
-    testing "reconnecting" do
-      disconnect [ server ]
-      connect_client_and_server(client, server)
     end
   end
 end

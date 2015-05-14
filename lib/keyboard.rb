@@ -8,6 +8,13 @@ class Keyboard
     @java_keyboard = KeyboardImpl.new(text_area, KeyboardListenerImpl.new)
   end
 
+  def press_delete(num_times = 1)
+    num_times.times do
+      java_keyboard.pressDelete();
+      sleep 0.025
+    end
+  end
+
   def type_string(text, speed)
     java_keyboard.typeString(text, (speed * 1000).to_i)
   end

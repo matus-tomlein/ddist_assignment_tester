@@ -80,6 +80,7 @@ end
 get '/clear' do
   protect_me do
     simulator.clear_text_area
+    'OK'
   end
 end
 

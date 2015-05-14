@@ -32,8 +32,7 @@ class Commander
       compare_texts(text_on_client, text_on_server, 'bB', 100, 'cC', 100)
     end
 
-    ts_finish(client, server)
-    ts_start_up(client, server)
+    clear_text_area(client, server)
 
     testing "writing closer together" do
       set_caret [ client, 10 ]
@@ -55,8 +54,7 @@ class Commander
       compare_texts(text_on_client, text_on_server, 'xX', 100, 'yY', 100)
     end
 
-    ts_finish(client, server)
-    ts_start_up(client, server)
+    clear_text_area(client, server)
 
     testing "writing really close together - 1 space apart" do
       set_caret [ client, 0 ]
@@ -78,8 +76,7 @@ class Commander
       compare_texts(text_on_client, text_on_server, 'mM', 100, 'nN', 100)
     end
 
-    ts_finish(client, server)
-    ts_start_up(client, server)
+    clear_text_area(client, server)
 
     testing "writing in the same place" do
       set_caret [ client, 0 ]
@@ -115,12 +112,6 @@ class Commander
       starting_text = 'A' * 200
       write [ 0, client, starting_text ]
       wait 1
-    end
-  end
-
-  def ts_finish(client, server)
-    testing 'disconnecting' do
-      disconnect [ server ]
     end
   end
 

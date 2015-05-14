@@ -45,7 +45,9 @@ class Simulator
   end
 
   def clear_text_area
-    upper_text_area.setText ''
+    count = upper_text_area.getText.size
+    set_caret_position 0
+    keyboard.press_delete count
   end
 
   def current_port

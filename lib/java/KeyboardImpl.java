@@ -46,6 +46,13 @@ public class KeyboardImpl {
       customTextArea.keyTyped(ch);
   }
 
+  public void pressDelete() {
+    if (textArea != null)
+      java.awt.EventQueue.invokeLater(new DeleteInTextArea(textArea));
+    else
+      customTextArea.deleteKeyPressed();
+  }
+
   class TypeKeyInTextArea implements Runnable {
     Component textArea;
     char ch;
@@ -61,6 +68,21 @@ public class KeyboardImpl {
       textArea.dispatchEvent(new KeyEvent(textArea,
             KeyEvent.KEY_TYPED, 0,
             modifiers, KeyEvent.VK_UNDEFINED, ch));
+    }
+  }
+
+  class DeleteInTextArea implements Runnable {
+    Component textArea;
+
+    DeleteInTextArea(Component textArea) {
+      this.textArea = textArea;
+    }
+
+    public void run() {
+      textArea.dispatchEvent(new KeyEvent(textArea, KeyEvent.KEY_PRESSED,
+            System.currentTimeMillis(), 0, KeyEvent.VK_DELETE));
+      textArea.dispatchEvent(new KeyEvent(textArea, KeyEvent.KEY_RELEASED,
+            System.currentTimeMillis(), 0, KeyEvent.VK_DELETE));
     }
   }
 }
