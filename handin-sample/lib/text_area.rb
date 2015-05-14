@@ -24,6 +24,9 @@ class TextArea < Component
     editor.process_event(Event.move_caret_right(editor.key))
   end
 
+  def backspaceKeyPressed
+  end
+
   def deleteKeyPressed
     position = editor.relative_position_by_key(editor.caret_key).next
     raise 'No such position to delete' unless position

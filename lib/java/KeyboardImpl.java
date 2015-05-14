@@ -46,9 +46,16 @@ public class KeyboardImpl {
       customTextArea.keyTyped(ch);
   }
 
+  public void pressBackspace() {
+    if (textArea != null)
+      java.awt.EventQueue.invokeLater(new PressInTextArea(textArea, KeyEvent.VK_BACK_SPACE));
+    else
+      customTextArea.backspaceKeyPressed();
+  }
+
   public void pressDelete() {
     if (textArea != null)
-      java.awt.EventQueue.invokeLater(new DeleteInTextArea(textArea));
+      java.awt.EventQueue.invokeLater(new PressInTextArea(textArea, KeyEvent.VK_DELETE));
     else
       customTextArea.deleteKeyPressed();
   }
@@ -71,18 +78,20 @@ public class KeyboardImpl {
     }
   }
 
-  class DeleteInTextArea implements Runnable {
+  class PressInTextArea implements Runnable {
     Component textArea;
+    int keyCode;
 
-    DeleteInTextArea(Component textArea) {
+    PressInTextArea(Component textArea, int keyCode) {
       this.textArea = textArea;
+      this.keyCode = keyCode;
     }
 
     public void run() {
       textArea.dispatchEvent(new KeyEvent(textArea, KeyEvent.KEY_PRESSED,
-            System.currentTimeMillis(), 0, KeyEvent.VK_DELETE));
+            System.currentTimeMillis(), 0, keyCode));
       textArea.dispatchEvent(new KeyEvent(textArea, KeyEvent.KEY_RELEASED,
-            System.currentTimeMillis(), 0, KeyEvent.VK_DELETE));
+            System.currentTimeMillis(), 0, keyCode));
     }
   }
 }

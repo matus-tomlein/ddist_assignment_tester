@@ -48,6 +48,12 @@ class Simulator
     count = upper_text_area.getText.size
     set_caret_position 0
     keyboard.press_delete count
+    sleep 1
+    # in case the editor doesn't support delete, try backspace
+    count = upper_text_area.getText.size
+    return if count == 0
+    set_caret_position count
+    keyboard.press_backspace count
   end
 
   def current_port

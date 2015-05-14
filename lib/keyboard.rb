@@ -15,6 +15,13 @@ class Keyboard
     end
   end
 
+  def press_backspace(num_times = 1)
+    num_times.times do
+      java_keyboard.pressBackspace();
+      sleep 0.025
+    end
+  end
+
   def type_string(text, speed)
     java_keyboard.typeString(text, (speed * 1000).to_i)
   end

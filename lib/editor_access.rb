@@ -55,7 +55,11 @@ class EditorAccess
     editor._getPortNumberField.getText.to_i
   end
 
-  def carret_changed; end
+  def carret_changed
+    if editor.respond_to? :carretChanged
+      editor.carretChanged
+    end
+  end
 
   private
 
