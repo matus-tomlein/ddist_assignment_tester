@@ -1,3 +1,5 @@
+require_relative 'lib/gems'
+
 require 'java'
 require 'sinatra'
 require 'json'

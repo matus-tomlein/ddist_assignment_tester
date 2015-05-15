@@ -1,3 +1,5 @@
+require_relative 'lib/gems'
+
 require 'colored'
 puts (File.read 'docs/cli_intro.txt').blue
 
