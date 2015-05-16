@@ -1,3 +1,5 @@
+require_relative 'server_socket_compiler'
+
 class EditorAccess
   attr_reader :editor
 
@@ -5,7 +7,7 @@ class EditorAccess
     @compiled_folder = compiled_folder
   end
 
-  def compile
+  def compile(instance_id)
     find_subfolder
 
     code_folder = if @subfolder
@@ -20,9 +22,11 @@ class EditorAccess
       file.puts(add_getters_to_source_code(source_code))
     end
 
+    ServerSocketCompiler.new(@compiled_folder).compile
+
     `cd #{code_folder} && javac *.java`
 
-    create_editor
+    create_editor(instance_id)
   end
 
   def lower_text_area
@@ -88,13 +92,15 @@ class EditorAccess
     raise "Menu action #{name} not found"
   end
 
-  def create_editor
+  def create_editor(instance_id)
     $CLASSPATH << @compiled_folder
     if @subfolder
       java_import "#{@subfolder}.DistributedTextEditor"
     else
       java_import 'DistributedTextEditor'
     end
+    java_import 'TesterIdentifier'
+    TesterIdentifier::id = instance_id
     DistributedTextEditor.main nil
     @editor = DistributedTextEditor::_instance
   end
@@ -120,11 +126,22 @@ class EditorAccess
     i_class = source_code.index('{', i_class)
     raise 'class DistributedTextEditor not found in source code' unless i_class
 
-    source_code = source_code.insert(i_class + 1, 'public JTextArea _getArea1() { return this.area1; }
-   public JTextArea _getArea2() { return this.area2; }
-   public JTextField _getIPAddressField() { return this.ipaddress; }
-   public JTextField _getPortNumberField() { return this.portNumber; }
-   public static DistributedTextEditor _instance;')
+    raise 'Variable with the name area1 not found in DistributedTextEditor' unless source_code.include? 'area1'
+
+    getters = [
+      'public JTextArea _getArea1() { return this.area1; }',
+      'public JTextField _getIPAddressField() { return this.ipaddress; }',
+      'public JTextField _getPortNumberField() { return this.portNumber; }',
+      'public static DistributedTextEditor _instance;'
+    ]
+
+    if source_code.include? 'area2'
+      getters << 'public JTextArea _getArea2() { return this.area2; }'
+    else
+      getters << 'public JTextArea _getArea2() { return this.area1; }'
+    end
+
+    source_code = source_code.insert(i_class + 1, getters.join("\n"))
 
     i = source_code.index('DistributedTextEditor()', i_class)
     raise 'DistributedTextEditor() not found in source code' unless i

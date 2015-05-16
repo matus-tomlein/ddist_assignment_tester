@@ -1,17 +1,22 @@
+require_relative 'server_socket_compiler'
+
 class SimulatedEditorAccess
   def initialize(compiled_folder, ruby = false)
     @ruby = ruby
     @compiled_folder = compiled_folder
   end
 
-  def compile
+  def compile(instance_id)
     if @ruby
       require "#{@compiled_folder}/simulated.rb"
     else
+      ServerSocketCompiler.new(@compiled_folder).compile
       `cd #{@compiled_folder} && javac *.java`
 
       $CLASSPATH << @compiled_folder
       java_import 'Simulated'
+      java_import 'TesterIdentifier'
+      TesterIdentifier::id = instance_id
     end
 
     @simulated = Simulated.new

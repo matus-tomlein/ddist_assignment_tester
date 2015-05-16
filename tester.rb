@@ -5,12 +5,12 @@ require 'sinatra'
 require 'json'
 require 'ostruct'
 
-require_relative 'lib/java_classes'
-require_relative 'lib/compiler'
+require_relative 'lib/compilation/compiler'
 require_relative 'lib/simulator'
 require_relative 'lib/time_keeper'
 require_relative 'lib/event_history'
 require_relative 'lib/content_watcher'
+require_relative 'lib/sockets/proxied_socket_manager'
 
 $instances = OpenStruct.new
 
@@ -19,7 +19,8 @@ handin_path = ARGV.any? ? ARGV.join(' ') : 'handin'
 
 Thread.new do
   begin
-    Compiler.run(handin_path) do |editor_access|
+    Compiler.run(handin_path, port) do |editor_access|
+      ProxiedSocketManager.start_proxy
       $instances.simulator = Simulator.new(editor_access)
       $instances.content_watcher = ContentWatcher.new(editor_access.upper_text_area)
     end

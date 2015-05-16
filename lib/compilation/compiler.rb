@@ -1,18 +1,20 @@
 require 'fileutils'
 
+require_relative 'java_classes'
 require_relative 'editor_access'
 require_relative 'simulated_editor_access'
 
 class Compiler
-  def initialize(handin_path)
+  def initialize(handin_path, instance_id)
     @handin_path = handin_path
+    @instance_id = instance_id
     subfolder = (0...8).map { (65 + rand(26)).chr }.join
     @compiled_folder = "handin-compiled/#{subfolder}"
     puts @compiled_folder
   end
 
-  def self.run(handin_path, &block)
-    compiler = self.new(handin_path)
+  def self.run(handin_path, instance_id, &block)
+    compiler = self.new(handin_path, instance_id)
     compiler.start(&block)
     compiler
   end
@@ -45,7 +47,7 @@ class Compiler
                       EditorAccess.new @compiled_folder
                     end
 
-    editor_access.compile
+    editor_access.compile(@instance_id)
     editor_access
   end
 
