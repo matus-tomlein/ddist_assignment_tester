@@ -12,11 +12,11 @@ class Commander
     ts_start_up(client, server)
 
     testing "writing on the client and server at the same time, far apart" do
-      additional_text_client = 'bB' * 100
-      additional_text_server = 'cC' * 100
+      additional_text_client = 'abcd' * 50
+      additional_text_server = '1234' * 50
 
-      set_caret [ client, 50 ]
-      set_caret [ server, 150 ]
+      set_caret [ client, 5 ]
+      set_caret [ server, 95 ]
 
       t_client = Thread.new { write [-1, client, additional_text_client] }
       t_server = Thread.new { write [-1, server, additional_text_server] }
@@ -29,7 +29,7 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'bB', 100, 'cC', 100)
+      compare_texts(text_on_client, text_on_server, 'abcd', 50, '1234', 50)
     end
 
     clear_text_area(client, server)
@@ -39,8 +39,8 @@ class Commander
       set_caret [ client, 10 ]
       set_caret [ server, 20 ]
 
-      write_client = 'xX' * 100
-      write_server = 'yY' * 100
+      write_client = 'abcd' * 50
+      write_server = '1234' * 50
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -52,7 +52,7 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'xX', 100, 'yY', 100)
+      compare_texts(text_on_client, text_on_server, 'abcd', 50, '1234', 50)
     end
 
     clear_text_area(client, server)
@@ -62,8 +62,8 @@ class Commander
       set_caret [ client, 0 ]
       set_caret [ server, 1 ]
 
-      write_client = 'mM' * 100
-      write_server = 'nN' * 100
+      write_client = 'abcd' * 50
+      write_server = '1234' * 50
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -75,7 +75,7 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'mM', 100, 'nN', 100)
+      compare_texts(text_on_client, text_on_server, 'abcd', 50, '1234', 50)
     end
 
     clear_text_area(client, server)
@@ -85,8 +85,8 @@ class Commander
       set_caret [ client, 0 ]
       set_caret [ server, 0 ]
 
-      write_client = 'fF' * 100
-      write_server = 'gG' * 100
+      write_client = 'abcd' * 50
+      write_server = '1234' * 50
       t_client = Thread.new { write [-1, client, write_client ] }
       t_server = Thread.new { write [-1, server, write_server ] }
 
@@ -98,7 +98,7 @@ class Commander
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'fF', 100, 'gG', 100)
+      compare_texts(text_on_client, text_on_server, 'abcd', 50, '1234', 50)
     end
 
     shutdown [ client ]
@@ -115,7 +115,7 @@ class Commander
 
   def write_initial_text(client, server)
     testing 'writing the initial text' do
-      starting_text = 'A' * 200
+      starting_text = 'O' * 100
       write [ 0, client, starting_text ]
       wait 1
     end

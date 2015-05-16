@@ -1,77 +1,70 @@
 class Commander
   def test_multiple_simultaneous(args)
-    test_multiple_simultaneous_2(args)
-    test_multiple_simultaneous_3(args)
-    test_multiple_simultaneous_4(args)
-  end
-  alias_method :tms, :test_multiple_simultaneous
+    node_0, node_1, node_2, node_3 = if args.length == 4
+                                       args
+                                     else
+                                       [ 'node_0', 'node_1', 'node_2', 'node_3' ]
+                                     end
 
-  def test_multiple_simultaneous_2(args)
-    tms_start_up
+    text1 = 'abcd' * 20
+    text2 = '1234' * 20
+    text3 = 'ABCD' * 20
+    text4 = '9876' * 20
+
+    testing 'connecting the nodes' do
+      listen [ node_0 ]
+      connect [ node_1, node_0 ]
+      connect [ node_2, node_0 ]
+      connect [ node_3, node_0 ]
+      wait 2
+    end
 
     testing '2 simultaneous editings' do
-      writer1 = 'node_0'
-      writer2 = 'node_1'
-      text1 = 'xX' * 20
-      text2 = 'yY' * 20
-
-      write [ 0, writer1, 'oo' ]
+      write [ 0, node_0, 'O' * 10 ]
       wait 1
 
-      set_caret [ writer1, 0 ]
-      set_caret [ writer2, 2 ]
+      set_caret [ node_0, 0 ]
+      set_caret [ node_1, 5 ]
 
       wait 1
 
-      t1 = Thread.new { write [ -1, writer1, text1 ] }
-      t2 = Thread.new { write [ -1, writer2, text2 ] }
+      t1 = Thread.new { write [ -1, node_0, text1 ] }
+      t2 = Thread.new { write [ -1, node_1, text2 ] }
 
       t1.join
       t2.join
 
       wait 10
 
-      text_server = read_area1 [ 'node_0' ]
+      text_server = read_area1 [ node_0 ]
 
-      4.times do |i|
-        read_text = read_area1 [ "node_#{i}" ]
+      [ node_0, node_1, node_2, node_3 ].each do |node|
+        read_text = read_area1 [ node ]
         raise "Text is garbled: #{read_text}" unless read_text.include? text1
         raise "Text is garbled: #{read_text}" unless read_text.include? text2
       end
 
-      4.times do |i|
-        read_text = read_area1 [ "node_#{i}" ]
+      [ node_0, node_1, node_2, node_3 ].each do |node|
+        read_text = read_area1 [ node ]
         raise "Text is not consistent accross nodes (but otherwise OK)): #{read_text} instead of #{text_server}" if read_text != text_server
       end
     end
 
-    tms_finish
-  end
-  alias_method :tms2, :test_multiple_simultaneous_2
-
-  def test_multiple_simultaneous_3(args)
-    tms_start_up
+    clear_text_area(node_0, node_1)
 
     testing '3 simultaneous editings' do
-      writer1 = 'node_0'
-      writer2 = 'node_1'
-      writer3 = 'node_2'
-      text1 = 'aA' * 10
-      text2 = 'bB' * 10
-      text3 = 'cC' * 10
-
-      write [ 0, writer1, 'oooo' ]
+      write [ 0, node_0, 'O' * 15 ]
       wait 1
 
-      set_caret [ writer1, 0 ]
-      set_caret [ writer2, 2 ]
-      set_caret [ writer3, 4 ]
+      set_caret [ node_0, 0 ]
+      set_caret [ node_1, 5 ]
+      set_caret [ node_2, 10 ]
 
       wait 1
 
-      t1 = Thread.new { write [ -1, writer1, text1 ] }
-      t2 = Thread.new { write [ -1, writer2, text2 ] }
-      t3 = Thread.new { write [ -1, writer3, text3 ] }
+      t1 = Thread.new { write [ -1, node_0, text1 ] }
+      t2 = Thread.new { write [ -1, node_1, text2 ] }
+      t3 = Thread.new { write [ -1, node_2, text3 ] }
 
       t1.join
       t2.join
@@ -79,52 +72,38 @@ class Commander
 
       wait 10
 
-      text_server = read_area1 [ 'node_0' ]
+      text_server = read_area1 [ node_0 ]
 
-      4.times do |i|
-        read_text = read_area1 [ "node_#{i}" ]
+      [ node_0, node_1, node_2, node_3 ].each do |node|
+        read_text = read_area1 [ node ]
         raise "Text is garbled: #{read_text}" unless read_text.include? text1
         raise "Text is garbled: #{read_text}" unless read_text.include? text2
         raise "Text is garbled: #{read_text}" unless read_text.include? text3
       end
 
-      4.times do |i|
-        read_text = read_area1 [ "node_#{i}" ]
+      [ node_0, node_1, node_2, node_3 ].each do |node|
+        read_text = read_area1 [ node ]
         raise "Text is not consistent accross nodes (but otherwise OK)): #{read_text} instead of #{text_server}" if read_text != text_server
       end
     end
 
-    tms_finish
-  end
-  alias_method :tms3, :test_multiple_simultaneous_3
-
-  def test_multiple_simultaneous_4(args)
-    tms_start_up
+    clear_text_area(node_0, node_1)
 
     testing '4 simultaneous editings' do
-      writer1 = 'node_0'
-      writer2 = 'node_1'
-      writer3 = 'node_2'
-      writer4 = 'node_3'
-      text1 = 'dD' * 10
-      text2 = 'eE' * 10
-      text3 = 'fF' * 10
-      text4 = 'gG' * 10
-
-      write [ 0, writer1, 'oooooo' ]
+      write [ 0, node_0, 'O' * 15 ]
       wait 1
 
-      set_caret [ writer1, 0 ]
-      set_caret [ writer2, 2 ]
-      set_caret [ writer3, 4 ]
-      set_caret [ writer4, 6 ]
+      set_caret [ node_0, 0 ]
+      set_caret [ node_1, 5 ]
+      set_caret [ node_2, 10 ]
+      set_caret [ node_3, 15 ]
 
       wait 1
 
-      t1 = Thread.new { write [ -1, writer1, text1 ] }
-      t2 = Thread.new { write [ -1, writer2, text2 ] }
-      t3 = Thread.new { write [ -1, writer3, text3 ] }
-      t4 = Thread.new { write [ -1, writer4, text4 ] }
+      t1 = Thread.new { write [ -1, node_0, text1 ] }
+      t2 = Thread.new { write [ -1, node_1, text2 ] }
+      t3 = Thread.new { write [ -1, node_2, text3 ] }
+      t4 = Thread.new { write [ -1, node_3, text4 ] }
 
       t1.join
       t2.join
@@ -133,18 +112,18 @@ class Commander
 
       wait 10
 
-      text_server = read_area1 [ 'node_0' ]
+      text_server = read_area1 [ node_0 ]
 
-      4.times do |i|
-        read_text = read_area1 [ "node_#{i}" ]
+      [ node_0, node_1, node_2, node_3 ].each do |node|
+        read_text = read_area1 [ node ]
         raise "Text is garbled: #{read_text}" unless read_text.include? text1
         raise "Text is garbled: #{read_text}" unless read_text.include? text2
         raise "Text is garbled: #{read_text}" unless read_text.include? text3
         raise "Text is garbled: #{read_text}" unless read_text.include? text4
       end
 
-      4.times do |i|
-        read_text = read_area1 [ "node_#{i}" ]
+      [ node_0, node_1, node_2, node_3 ].each do |node|
+        read_text = read_area1 [ node ]
         raise "Text is not consistent accross nodes (but otherwise OK): #{read_text} instead of #{text_server}" if read_text != text_server
       end
     end
@@ -153,29 +132,9 @@ class Commander
       shutdown [ "node_#{i}" ]
     end
 
-    tms_finish
-  end
-  alias_method :tms4, :test_multiple_simultaneous_4
-
-  def tms_start_up
-    testing 'connecting the nodes' do
-      listen [ 'node_0' ]
-      connect [ 'node_1', 'node_0' ]
-      connect [ 'node_2', 'node_0' ]
-      connect [ 'node_3', 'node_0' ]
-      wait 2
-    end
-  end
-
-  def tms_finish
-    testing 'disconnecting' do
-      4.times do |i|
-        disconnect [ "node_#{i}" ]
-      end
-    end
-
     overview
   end
+  alias_method :tms, :test_multiple_simultaneous
 
   def prepare_test_multiple_simultaneous(args)
     handin_path = 'handin'

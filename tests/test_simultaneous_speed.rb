@@ -45,10 +45,10 @@ class Commander
 
   def do_simultaneous_typing(client, server, speed)
     testing "writing on the client and server at the same time, speed: #{speed}" do
-      starting_text = 'aA' * 50
+      starting_text = 'O' * 100
       write [ 0, client, starting_text ]
-      additional_text_client = 'bB' * 50
-      additional_text_server = 'cC' * 50
+      additional_text_client = 'abcd' * 50
+      additional_text_server = '1234' * 50
 
       wait 1
 
@@ -68,12 +68,12 @@ class Commander
       t_client.join
       t_server.join
 
-      wait 1
+      wait 2
 
       text_on_client = read_area1 [client]
       text_on_server = read_area1 [server]
 
-      compare_texts(text_on_client, text_on_server, 'bB', 50, 'cC', 50)
+      compare_texts(text_on_client, text_on_server, 'abcd', 50, '1234', 50)
     end
   end
 end

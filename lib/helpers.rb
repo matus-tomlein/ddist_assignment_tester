@@ -152,7 +152,9 @@ module TestHelper
     testing 'clearing the text area' do
       clear [ server ]
       wait 1
-      raise 'Failed to clear' unless read([ client ]).empty?
+      clear [ client ]
+      wait 1
+      raise 'Failed to clear' unless read([ client ]).empty? && read([ server ]).empty?
     end
   end
 end
