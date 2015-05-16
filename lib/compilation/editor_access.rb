@@ -24,7 +24,7 @@ class EditorAccess
 
     ServerSocketCompiler.new(@compiled_folder).compile
 
-    `cd #{code_folder} && javac *.java`
+    `cd #{code_folder} && javac *.java */*.java`
 
     create_editor(instance_id)
   end
@@ -99,7 +99,7 @@ class EditorAccess
     else
       java_import 'DistributedTextEditor'
     end
-    java_import 'TesterIdentifier'
+    java_import 'tester.TesterIdentifier'
     TesterIdentifier::id = instance_id
     DistributedTextEditor.main nil
     @editor = DistributedTextEditor::_instance

@@ -16,6 +16,10 @@ class Commander
   FAST_TYPING = 0.05
   REALLY_FAST_TYPING = 0.01
 
+  THROTTLING_A_BIT = 10
+  THROTTLING_SLOW = 6
+  THROTTLING_VERY_SLOW = 9
+
   include TestHelper
   include ConnectionHelper
 
@@ -109,6 +113,13 @@ class Commander
 
   def event_history(args)
     get args.shift, '/event_history'
+  end
+
+  def throttle(args)
+    get args.shift, '/throttle', {
+      'direction' => args.shift,
+      'speed' => args.shift
+    }
   end
 
   def debug(args)

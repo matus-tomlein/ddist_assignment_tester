@@ -10,7 +10,7 @@ require_relative 'lib/simulator'
 require_relative 'lib/time_keeper'
 require_relative 'lib/event_history'
 require_relative 'lib/content_watcher'
-require_relative 'lib/sockets/proxied_socket_manager'
+require_relative 'lib/sockets/socket_proxy'
 
 $instances = OpenStruct.new
 
@@ -20,7 +20,7 @@ handin_path = ARGV.any? ? ARGV.join(' ') : 'handin'
 Thread.new do
   begin
     Compiler.run(handin_path, port) do |editor_access|
-      ProxiedSocketManager.start_proxy
+      SocketProxy.start_proxy
       $instances.simulator = Simulator.new(editor_access)
       $instances.content_watcher = ContentWatcher.new(editor_access.upper_text_area)
     end
@@ -97,11 +97,22 @@ get '/exit' do
 end
 
 get '/start_watching_content' do
-  content_watcher.start_watching
+  protect_me do
+    content_watcher.start_watching
+  end
 end
 
 get '/event_history' do
-  EventHistory.drop.to_json
+  protect_me do
+    EventHistory.drop.to_json
+  end
+end
+
+get '/throttle' do
+  protect_me do
+    SocketProxy.throttle params['direction'].to_sym, params['speed']
+    'OK'
+  end
 end
 
 def protect_me

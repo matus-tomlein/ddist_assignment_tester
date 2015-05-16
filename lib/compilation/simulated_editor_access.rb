@@ -11,11 +11,11 @@ class SimulatedEditorAccess
       require "#{@compiled_folder}/simulated.rb"
     else
       ServerSocketCompiler.new(@compiled_folder).compile
-      `cd #{@compiled_folder} && javac *.java`
+      `cd #{@compiled_folder} && javac *.java */*.java`
 
       $CLASSPATH << @compiled_folder
       java_import 'Simulated'
-      java_import 'TesterIdentifier'
+      java_import 'tester.TesterIdentifier'
       TesterIdentifier::id = instance_id
     end
 
