@@ -108,6 +108,13 @@ get '/event_history' do
   end
 end
 
+get '/shuffle' do
+  protect_me do
+    SocketProxy.shuffle params['window']
+    'OK'
+  end
+end
+
 get '/throttle' do
   protect_me do
     SocketProxy.throttle params['direction'].to_sym, params['speed']

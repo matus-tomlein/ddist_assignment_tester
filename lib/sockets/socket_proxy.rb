@@ -1,5 +1,9 @@
 require 'thread'
 
+require_relative 'delayed_jobs'
+require_relative 'shuffled_jobs'
+require_relative 'sender'
+
 class SocketProxy
   def self.start_proxy
     require_relative 'socket_listener'
@@ -8,6 +12,10 @@ class SocketProxy
     listener = SocketListener.new
     ProxiedServerSocket::listener = listener
     ProxiedSocket::listener = listener
+  end
+
+  def self.shuffle(window)
+    proxies.each { |proxy| proxy.shuffle(window) }
   end
 
   def self.throttle(direction, speed)
@@ -19,16 +27,15 @@ class SocketProxy
   def self.create_and_start(host, port, actual_port, proxy_type = :server)
     proxies.each do |proxy|
       if proxy.host == host and proxy.port == port
-        proxy.active = true
+        proxy.activate
         return
       end
     end
     SocketProxy.new(host, port, actual_port, proxy_type).start
   end
 
-  DELAY = 0.1
-
   attr_accessor :active, :host, :port
+  attr_reader :sender
 
   def initialize(host, port, actual_port, proxy_type = :server)
     @host = host
@@ -36,20 +43,22 @@ class SocketProxy
     @actual_port = actual_port
     @proxy_type = proxy_type
     @sockets = []
+    @sender = Sender.new
+    @delayed_jobs = DelayedJobs.new(@sender)
+    @shuffled_jobs = ShuffledJobs.new(@sender)
     @throttling = {}
-    @tick_lock = Mutex.new
-    @delayed_jobs = []
-    @ready_jobs = Queue.new
 
     puts "Proxy initialized with #{port} and #{actual_port}"
 
     SocketProxy.proxies << self
-    process_delayed_jobs
-    process_ready_jobs
+  end
+
+  def activate
+    @sender.active = true
   end
 
   def start
-    @active = true
+    sender.active = true
     puts "Proxy listening on port #{@port}"
     Thread.new(TCPServer.new(@port)) do |server|
       @tcp_server = server
@@ -77,46 +86,45 @@ class SocketProxy
   end
 
   def proxy_sockets(source, destination, direction)
-    loop do
-      break unless active
+    begin
+      loop do
+        break unless sender.active
 
-      msg = source.recv 10000
-      if msg.empty?
-        destination.close
-        puts "Received an empty message, stopping communication"
-        stop if direction == :download
-        break
-      else
-        delay(direction, destination, msg)
+        msg = source.recv 10000
+        if msg.empty?
+          destination.close
+          puts "Received an empty message, stopping communication"
+          stop if direction == :download
+          break
+        else
+          send(direction, destination, msg)
+        end
       end
+    rescue => ex
+      puts ex.message
     end
   end
 
   def stop
     @sockets.each do |socket|
-      socket.close
+      socket.close unless socket.closed?
     end
     @sockets = []
-    @active = false
+    sender.active = false
   end
 
-  def delay(direction, socket, msg)
+  def send(direction, socket, msg)
     job = {
       socket: socket,
       msg: msg
     }
 
-    begin
-      time = @throttling[direction]
-      if time and time > 0
-        @tick_lock.synchronize do
-          (@delayed_jobs[time] ||= []) << job
-        end
-      else
-        @ready_jobs << job
-      end
-    rescue => ex
-      puts ex.message
+    if should_shuffle(direction)
+      @shuffled_jobs.shuffle job
+    elsif @throttling[direction] and @throttling[direction] > 0
+      @delayed_jobs.delay job, @throttling[direction]
+    else
+      @sender.send job
     end
   end
 
@@ -124,28 +132,12 @@ class SocketProxy
     @throttling[direction] = speed.to_i
   end
 
-  def process_delayed_jobs
-    Thread.new do
-      loop do
-        begin
-          jobs = @tick_lock.synchronize { @delayed_jobs.shift }
-
-          jobs.each { |job| @ready_jobs << job } if active and jobs
-        rescue => ex
-          puts ex.message
-        end
-
-        sleep DELAY
-      end
-    end
+  def should_shuffle(direction)
+    return false if @shuffled_jobs.window == 0
+    direction == :download and @proxy_type == :server
   end
 
-  def process_ready_jobs
-    Thread.new do
-      loop do
-        job = @ready_jobs.pop
-        job[:socket].send(job[:msg], 0) if active
-      end
-    end
+  def shuffle(window)
+    @shuffled_jobs.set_window window.to_f
   end
 end

@@ -20,6 +20,10 @@ class Commander
   THROTTLING_SLOW = 6
   THROTTLING_VERY_SLOW = 9
 
+  REORDERING_SMALL_WINDOW = 0.1
+  REORDERING_BIGGER_WINDOW = 0.5
+  REORDERING_LARGE_WINDOW = 1
+
   include TestHelper
   include ConnectionHelper
 
@@ -113,6 +117,12 @@ class Commander
 
   def event_history(args)
     get args.shift, '/event_history'
+  end
+
+  def shuffle(args)
+    get args.shift, '/shuffle', {
+      'window' => args.shift
+    }
   end
 
   def throttle(args)
