@@ -13,7 +13,7 @@ import java.net.InetSocketAddress;
 public class ProxiedSocket extends java.net.Socket {
 
   public static NewSocketListener listener;
-  private int i = 0;
+  public static int i = 1;
 
   public ProxiedSocket() {
     super();
@@ -40,8 +40,8 @@ public class ProxiedSocket extends java.net.Socket {
     int port = ((InetSocketAddress) endpoint).getPort();
     String hostname = ((InetSocketAddress) endpoint).getHostName();
 
-    int newPort = port + TesterIdentifier.id + i;
-    i++;
+    int newPort = port + TesterIdentifier.id + ProxiedSocket.i;
+    ProxiedSocket.i++;
 
     if (ProxiedServerSocket.listener != null) {
       listener.socketCreated(hostname, port, newPort);
@@ -50,8 +50,4 @@ public class ProxiedSocket extends java.net.Socket {
     return new InetSocketAddress(hostname, port);
   }
 
-//   @Override
-//   public void connect(SocketAddress endpoint, int timeout) throws IOException {
-//     connect(endpoint);
-//   }
 }

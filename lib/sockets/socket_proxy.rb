@@ -26,7 +26,7 @@ class SocketProxy
     SocketProxy.new(host, port, actual_port, proxy_type).start
   end
 
-  DELAY = 0.2
+  DELAY = 0.1
 
   attr_accessor :active, :host, :port
 
@@ -38,11 +38,10 @@ class SocketProxy
     @sockets = []
     @throttling = {}
     @tick_lock = Mutex.new
-    @tick = 0
-    @delayed_jobs = {}
+    @delayed_jobs = []
     @ready_jobs = Queue.new
 
-    puts "initialized with #{port} and #{actual_port}"
+    puts "Proxy initialized with #{port} and #{actual_port}"
 
     SocketProxy.proxies << self
     process_delayed_jobs
@@ -51,7 +50,7 @@ class SocketProxy
 
   def start
     @active = true
-    puts "Using port #{@port}"
+    puts "Proxy listening on port #{@port}"
     Thread.new(TCPServer.new(@port)) do |server|
       @tcp_server = server
       server_loop
@@ -68,9 +67,9 @@ class SocketProxy
   end
 
   def client_accepted(client)
-    puts "Connecting to #{@host} and #{@actual_port}"
+    puts "Proxy received client, connecting to #{@host} and #{@actual_port}"
     TCPSocket.open(@host, @actual_port) do |server|
-      puts "Socket accepted"
+      puts "Proxy connected"
       @sockets << server
       Thread.new { proxy_sockets(client, server, :upload) }
       proxy_sockets(server, client, :download)
@@ -111,7 +110,7 @@ class SocketProxy
       time = @throttling[direction]
       if time and time > 0
         @tick_lock.synchronize do
-          (@delayed_jobs[@tick + time] ||= []) << job
+          (@delayed_jobs[time] ||= []) << job
         end
       else
         @ready_jobs << job
@@ -129,12 +128,7 @@ class SocketProxy
     Thread.new do
       loop do
         begin
-          jobs = @tick_lock.synchronize do
-            @tick += 1
-            jobs = @delayed_jobs[@tick]
-            @delayed_jobs[@tick] = nil
-            jobs
-          end
+          jobs = @tick_lock.synchronize { @delayed_jobs.shift }
 
           jobs.each { |job| @ready_jobs << job } if active and jobs
         rescue => ex
