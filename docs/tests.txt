@@ -30,3 +30,6 @@ These are the tests that you can run:
 - Test for churn
   - Connecting, disconnecting clients and the server
   - run ptc to start up, then tc
+- Test for throttling network traffic
+  - Slows down the network traffic and runs simultaneous tests
+  - run ptts to start up, then tts
