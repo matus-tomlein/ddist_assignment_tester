@@ -16,8 +16,8 @@ class ServerSocketCompiler
     Dir.glob("#{@folder}/**/*.java") do |file|
       File.open(file) do |source_file|
         contents = source_file.read
-        new_contents = contents.gsub("new #{old_class}", "new tester.#{new_class}").
-          gsub("new #{old_class_with_module}", "new tester.#{new_class}")
+        new_contents = contents.gsub("new #{old_class}(", "new tester.#{new_class}(").
+          gsub("new #{old_class_with_module}(", "new tester.#{new_class}(")
 
         if new_contents != contents
           File.open(file, "w+") { |f| f.write(new_contents) }
