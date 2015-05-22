@@ -1,5 +1,13 @@
 require 'colored'
 
+class SimultaneousTextCompareError < StandardError
+  attr_reader :results
+
+  def initialize(results)
+    @results = results
+  end
+end
+
 module TestHelper
   def testing(description = '')
     @failures = 0 unless @failures
@@ -85,50 +93,46 @@ module TestHelper
   def start_tester(port, handin_path)
     log_path = "log/node_#{port}.log"
     print "Output from node with port #{port} will be saved to file #{log_path}.\n".blue
-    `bin/jruby-1.7.19/bin/jruby tester.rb #{port} #{handin_path} > #{log_path} 2>&1`
+    `jruby tester.rb #{port} #{handin_path} > #{log_path} 2>&1`
   end
 
-  def compare_texts(text_on_client, text_on_server, client_unit, client_repetitions, server_unit, server_repetitions)
+  def compare_texts(text_on_client, text_on_server, client_unit, client_repetitions, server_unit, server_repetitions, client_label = 'client', server_label = 'server')
     errors = []
     write_client = client_unit * client_repetitions
     write_server = server_unit * server_repetitions
+    results = {
+      :client_text_on_server => 100,
+      :server_text_on_client => 100,
+      :levenshtein_distance => 0
+    }
 
     if text_on_client != text_on_server
       dst = StringDistance.calculate_distance(text_on_client, text_on_server)
-      errors << "Text on client and server are different: Levenshtein distance is #{dst} edits"
-    end
-
-    unless text_on_client.include? write_client
-      percentage = calculate_percentage_of_included_repetitions(text_on_client, client_unit, client_repetitions)
-      errors << "Text on client is garbled: contains #{percentage}% of written text on client"
+      results[:levenshtein_distance] = dst
+      errors << "Text on #{client_label} and #{server_label} are different: Levenshtein distance is #{dst} edits"
     end
 
     unless text_on_client.include? write_server
       percentage = calculate_percentage_of_included_repetitions(text_on_client, server_unit, server_repetitions)
-      errors << "Text on client is garbled: contains #{percentage}% of written text on server"
-    end
-
-    unless text_on_server.include? write_server
-      percentage = calculate_percentage_of_included_repetitions(text_on_server, server_unit, server_repetitions)
-      errors << "Text on server is garbled: contains #{percentage}% of written text on server"
+      results[:server_text_on_client] = percentage
+      errors << "Text on #{client_label} is garbled: contains #{percentage}% of #{server_unit}"
     end
 
     unless text_on_server.include? write_client
       percentage = calculate_percentage_of_included_repetitions(text_on_server, client_unit, client_repetitions)
-      errors << "Text on server is garbled: contains #{percentage}% of written text on client"
+      results[:client_text_on_server] = percentage
+      errors << "Text on #{server_label} is garbled: contains #{percentage}% of #{client_unit}"
     end
 
     if errors.any?
-      print "Text on client: ".blue
+      print "Text on #{client_label}: ".blue
       puts_output text_on_client, client_unit, server_unit
-      print "Text on server: ".blue
+      print "Text on #{server_label}: ".blue
       puts_output text_on_server, client_unit, server_unit
-      print "Actual text written on client: ".blue
-      puts write_client.blue.bold
-      print "Actual text written on server: ".blue
-      puts write_server.magenta.underline
-      raise errors.join("\n")
+      raise SimultaneousTextCompareError.new(results), errors.join("\n")
     end
+
+    results
   end
 
   def puts_output(text, client_unit, server_unit)

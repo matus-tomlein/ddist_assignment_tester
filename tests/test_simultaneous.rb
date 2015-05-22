@@ -40,8 +40,8 @@ class Commander
   end
   alias_method :ts, :test_simultaneous
 
-  def type_simultaneously(client, server, client_caret, server_caret, waiting_time = 1)
-    starting_text = 'O' * 100
+  def type_simultaneously(client, server, client_caret, server_caret, waiting_time = 1, typing_speed = LESS_SLOWER_TYPING)
+    starting_text = 'O' * ([ client_caret, server_caret].max + 5)
     write [ 0, client, starting_text ]
 
     wait waiting_time
@@ -52,8 +52,12 @@ class Commander
     set_caret [ client, client_caret ]
     set_caret [ server, server_caret ]
 
-    t_client = Thread.new { write [-1, client, additional_text_client] }
-    t_server = Thread.new { write [-1, server, additional_text_server] }
+    t_client = Thread.new do
+      write_with_speed [-1, client, typing_speed, additional_text_client]
+    end
+    t_server = Thread.new do
+      write_with_speed [-1, server, typing_speed, additional_text_server]
+    end
 
     t_client.join
     t_server.join
