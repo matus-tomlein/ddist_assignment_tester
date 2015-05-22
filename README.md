@@ -13,11 +13,12 @@ To get an overview of how the tester works and how to use it,
 
 # Installation
 
-1. `cd` into the project
-2. Copy your solution to a folder called `handin`
-3. `bin/jruby-1.7.19/bin/jruby cli.rb`
+1. Install [jRuby](http://jruby.org)
+2. Execute `jruby -S gem install colored json sinatra macaddr levenshtein-jruby`
+3. Download the tester
+4. Copy your solution to a folder called `handin` inside the tester folder
+5. Open the tester folder in console and execute `jruby cli.rb`
 
-  - if that fails, try running: `bin/jruby-1.7.19/bin/jruby -S gem install colored json sinatra macaddr levenshtein-jruby`
 
 # Usage
 

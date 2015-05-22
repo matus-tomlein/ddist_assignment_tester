@@ -1,4 +1,0 @@
-language: ruby
-rvm:
-  - jruby-18mode
-  - jruby-19mode

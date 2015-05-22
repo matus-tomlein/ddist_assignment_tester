@@ -7,11 +7,15 @@ require_relative 'sender'
 class SocketProxy
   def self.start_proxy
     require_relative 'socket_listener'
-    java_import 'tester.ProxiedServerSocket'
-    java_import 'tester.ProxiedSocket'
-    listener = SocketListener.new
-    ProxiedServerSocket::listener = listener
-    ProxiedSocket::listener = listener
+    begin
+      java_import 'tester.ProxiedServerSocket'
+      java_import 'tester.ProxiedSocket'
+      listener = SocketListener.new
+      ProxiedServerSocket::listener = listener
+      ProxiedSocket::listener = listener
+    rescue => e
+      puts e.message
+    end
   end
 
   def self.shuffle(window)

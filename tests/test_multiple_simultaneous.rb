@@ -6,10 +6,16 @@ class Commander
                                        [ 'node_0', 'node_1', 'node_2', 'node_3' ]
                                      end
 
-    text1 = 'abcd' * 20
-    text2 = '1234' * 20
-    text3 = 'ABCD' * 20
-    text4 = '9876' * 20
+    text1_unit = 'abcd'
+    text2_unit = '1234'
+    text3_unit = 'ABCD'
+    text4_unit = '9876'
+    repetitions = 20
+
+    text1 = text1_unit * repetitions
+    text2 = text2_unit * repetitions
+    text3 = text3_unit * repetitions
+    text4 = text4_unit * repetitions
 
     testing 'connecting the nodes' do
       listen [ node_0 ]
@@ -36,17 +42,14 @@ class Commander
 
       wait 10
 
-      text_server = read_area1 [ node_0 ]
+      text_server = read_area1([ node_0 ])
 
       [ node_0, node_1, node_2, node_3 ].each do |node|
-        read_text = read_area1 [ node ]
-        raise "Text is garbled: #{read_text}" unless read_text.include? text1
-        raise "Text is garbled: #{read_text}" unless read_text.include? text2
-      end
-
-      [ node_0, node_1, node_2, node_3 ].each do |node|
-        read_text = read_area1 [ node ]
-        raise "Text is not consistent accross nodes (but otherwise OK)): #{read_text} instead of #{text_server}" if read_text != text_server
+        read_text = read_area1([ node ])
+        compare_texts(read_text, text_server,
+                      text2_unit, repetitions,
+                      text1_unit, repetitions,
+                      node, node_0)
       end
     end
 
@@ -76,14 +79,14 @@ class Commander
 
       [ node_0, node_1, node_2, node_3 ].each do |node|
         read_text = read_area1 [ node ]
-        raise "Text is garbled: #{read_text}" unless read_text.include? text1
-        raise "Text is garbled: #{read_text}" unless read_text.include? text2
-        raise "Text is garbled: #{read_text}" unless read_text.include? text3
-      end
-
-      [ node_0, node_1, node_2, node_3 ].each do |node|
-        read_text = read_area1 [ node ]
-        raise "Text is not consistent accross nodes (but otherwise OK)): #{read_text} instead of #{text_server}" if read_text != text_server
+        compare_texts(read_text, text_server,
+                      text2_unit, repetitions,
+                      text1_unit, repetitions,
+                      node, node_0)
+        compare_texts(read_text, text_server,
+                      text2_unit, repetitions,
+                      text3_unit, repetitions,
+                      node, node_0)
       end
     end
 
@@ -115,16 +118,15 @@ class Commander
       text_server = read_area1 [ node_0 ]
 
       [ node_0, node_1, node_2, node_3 ].each do |node|
-        read_text = read_area1 [ node ]
-        raise "Text is garbled: #{read_text}" unless read_text.include? text1
-        raise "Text is garbled: #{read_text}" unless read_text.include? text2
-        raise "Text is garbled: #{read_text}" unless read_text.include? text3
-        raise "Text is garbled: #{read_text}" unless read_text.include? text4
-      end
-
-      [ node_0, node_1, node_2, node_3 ].each do |node|
-        read_text = read_area1 [ node ]
-        raise "Text is not consistent accross nodes (but otherwise OK): #{read_text} instead of #{text_server}" if read_text != text_server
+        read_text = read_area1([ node ])
+        compare_texts(read_text, text_server,
+                      text1_unit, repetitions,
+                      text2_unit, repetitions,
+                      node, node_0)
+        compare_texts(read_text, text_server,
+                      text3_unit, repetitions,
+                      text4_unit, repetitions,
+                      node, node_0)
       end
     end
 

@@ -1,6 +1,11 @@
 require_relative 'socket_proxy'
 
-java_import 'tester.NewSocketListener'
+begin
+  java_import 'tester.NewSocketListener'
+rescue => e
+  puts e.message
+  module NewSocketListener; end
+end
 
 class SocketListener
   include NewSocketListener
