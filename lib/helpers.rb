@@ -96,6 +96,40 @@ module TestHelper
     `jruby tester.rb #{port} #{handin_path} > #{log_path} 2>&1`
   end
 
+  def compare_texts_to_expected(texts_with_labels, expected_unit, expected_repetitions)
+    expected_text = expected_unit * expected_repetitions
+    errors = []
+
+    texts_with_labels.each do |label, text|
+      percentage = calculate_percentage_of_included_repetitions(text, expected_unit, expected_repetitions)
+      if percentage == 100.0
+        puts "Text on #{label} is completely correct!".green
+      else
+        errors << "Text on #{label} contains #{percentage}% of written words"
+      end
+    end
+
+    texts_with_labels.keys.combination(2).to_a.each do |combination|
+      label_1 = combination.first
+      label_2 = combination.last
+
+      if texts_with_labels[label_1] == texts_with_labels[label_2]
+        puts "Texts on #{label_1} and #{label_2} are consistent!".green
+      else
+        dst = StringDistance.calculate_distance(texts_with_labels[label_1], texts_with_labels[label_2])
+        errors << "Text on #{label_1} and #{label_2} are different: Levenshtein distance is #{dst} edits"
+      end
+    end
+
+    if errors.any?
+      texts_with_labels.each do |label, text|
+        print "Text on #{label}: ".blue
+        puts_output text, expected_unit, nil
+      end
+      raise errors.join("\n")
+    end
+  end
+
   def compare_texts(text_on_client, text_on_server, client_unit, client_repetitions, server_unit, server_repetitions, client_label = 'client', server_label = 'server')
     errors = []
     write_client = client_unit * client_repetitions
@@ -139,7 +173,7 @@ module TestHelper
     text.each_char do |c|
       if client_unit.include? c
         print c.blue.bold
-      elsif server_unit.include? c
+      elsif server_unit && server_unit.include?(c)
         print c.magenta.underline
       else
         print c

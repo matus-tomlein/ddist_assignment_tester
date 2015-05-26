@@ -99,6 +99,16 @@ class Commander
     }
   end
 
+  def write_repeatedly(args)
+    caret, client, text, repetitions, speed = args
+    get client, '/write', {
+      caret: caret.to_i,
+      msg: text,
+      repetitions: repetitions,
+      speed: speed
+    }
+  end
+
   def write(args)
     caret = args.shift.to_i
 

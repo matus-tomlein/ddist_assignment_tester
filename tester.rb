@@ -34,10 +34,13 @@ set :port, port
 
 get '/write' do
   protect_me do
+    msg = params['msg']
+    msg *= params['repetitions'].to_i if params['repetitions']
+
     if params['speed']
-      simulator.write_in_text_area params['msg'], params['caret'], params['speed'].to_f
+      simulator.write_in_text_area msg, params['caret'], params['speed'].to_f
     else
-      simulator.write_in_text_area params['msg'], params['caret']
+      simulator.write_in_text_area msg, params['caret']
     end
   end
 end
