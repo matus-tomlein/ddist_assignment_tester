@@ -1,3 +1,5 @@
+require 'fileutils'
+
 class ServerSocketCompiler
   def initialize(folder)
     @folder = folder
@@ -6,8 +8,7 @@ class ServerSocketCompiler
   def compile
     replace_class_constructor('ServerSocket', 'java.net.ServerSocket', 'ProxiedServerSocket')
     replace_class_constructor('Socket', 'java.net.Socket', 'ProxiedSocket')
-    `mkdir #{@folder}/tester`
-    `cp lib/handin_extensions/*.java #{@folder}/tester`
+    FileUtils.cp_r 'lib/handin_extensions/.', "#{@folder}/tester"
   end
 
   private
